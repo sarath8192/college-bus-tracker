@@ -42,6 +42,11 @@ function Sidebar() {
             Seat Availability
           </Link>
         </li>
+        <li>
+  <Link to="/student/notifications">
+    Notifications
+  </Link>
+</li>
 
         <br />
 

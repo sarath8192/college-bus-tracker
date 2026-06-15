@@ -1,4 +1,4 @@
-import StudentLayout from "../../components/layouts/studentlayout";
+import StudentLayout from "../../components/layouts/StudentLayout";
 import BusMap from "../../components/Maps/BusMap";
 
 import { busLocation } from "../../mock/location";

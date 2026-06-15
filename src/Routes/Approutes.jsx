@@ -7,6 +7,7 @@ import Dashboard from "../pages/student/Dashboard";
 import LiveTracking from "../pages/student/LiveTracking";
 import SeatAvailability from "../pages/student/SeatAvailability";
 import Profile from "../pages/student/Profile";
+import Notifications from "../pages/student/Notifications";
 
 function AppRoutes() {
   return (
@@ -42,6 +43,11 @@ function AppRoutes() {
         path="/student/profile"
         element={<Profile />}
       />
+
+      <Route
+  path="/student/notifications"
+  element={<Notifications />}
+/>
     </Routes>
   );
 }
