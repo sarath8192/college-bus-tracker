@@ -1,126 +1,178 @@
-let buses = [
-  {
-    id: 1,
-    busNumber: "VIT-01",
-    route: "Vijayawada",
-    driver: "Ramesh",
-    totalSeats: 40,
-    occupiedSeats: 20,
-    status: "Active",
-  },
-  {
-    id: 2,
-    busNumber: "VIT-02",
-    route: "Guntur",
-    driver: "Suresh",
-    totalSeats: 40,
-    occupiedSeats: 15,
-    status: "Active",
-  },
-];
+const supabase = require("../config/supabaseClient");
 
-const getBuses = (req, res) => {
-  res.status(200).json(buses);
-};
+// GET all buses
+const getBuses = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("buses")
+      .select("*")
+      .order("id", { ascending: true });
 
-const getBusById = (req, res) => {
-  const id = Number(req.params.id);
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
 
-  const bus = buses.find((b) => b.id === id);
-
-  if (!bus) {
-    return res.status(404).json({
-      message: "Bus not found",
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  res.status(200).json(bus);
 };
 
-const createBus = (req, res) => {
-  const {
-    busNumber,
-    route,
-    driver,
-    totalSeats,
-    occupiedSeats,
-    status,
-  } = req.body;
+// GET bus by ID
+const getBusById = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
 
-  if (!busNumber || !route || !driver || !totalSeats) {
-    return res.status(400).json({
-      message: "Please provide busNumber, route, driver and totalSeats",
+    const { data, error } = await supabase
+      .from("buses")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      return res.status(404).json({
+        message: "Bus not found",
+      });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  const newBus = {
-    id: buses.length + 1,
-    busNumber,
-    route,
-    driver,
-    totalSeats,
-    occupiedSeats: occupiedSeats || 0,
-    status: status || "Active",
-  };
-
-  buses.push(newBus);
-
-  res.status(201).json({
-    message: "Bus created successfully",
-    bus: newBus,
-  });
 };
 
-const updateBus = (req, res) => {
-  const id = Number(req.params.id);
+// POST create bus
+const createBus = async (req, res) => {
+  try {
+    const {
+      bus_number,
+      route,
+      driver,
+      total_seats,
+      occupied_seats,
+      status,
+    } = req.body;
 
-  const bus = buses.find((b) => b.id === id);
+    if (!bus_number || !route || !driver || !total_seats) {
+      return res.status(400).json({
+        message: "Please provide bus_number, route, driver and total_seats",
+      });
+    }
 
-  if (!bus) {
-    return res.status(404).json({
-      message: "Bus not found",
+    const { data, error } = await supabase
+      .from("buses")
+      .insert([
+        {
+          bus_number,
+          route,
+          driver,
+          total_seats,
+          occupied_seats: occupied_seats || 0,
+          status: status || "Active",
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(201).json({
+      message: "Bus created successfully",
+      bus: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  const {
-    busNumber,
-    route,
-    driver,
-    totalSeats,
-    occupiedSeats,
-    status,
-  } = req.body;
-
-  bus.busNumber = busNumber || bus.busNumber;
-  bus.route = route || bus.route;
-  bus.driver = driver || bus.driver;
-  bus.totalSeats = totalSeats || bus.totalSeats;
-  bus.occupiedSeats =
-    occupiedSeats !== undefined ? occupiedSeats : bus.occupiedSeats;
-  bus.status = status || bus.status;
-
-  res.status(200).json({
-    message: "Bus updated successfully",
-    bus,
-  });
 };
 
-const deleteBus = (req, res) => {
-  const id = Number(req.params.id);
+// PUT update bus
+const updateBus = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
 
-  const bus = buses.find((b) => b.id === id);
+    const {
+      bus_number,
+      route,
+      driver,
+      total_seats,
+      occupied_seats,
+      status,
+    } = req.body;
 
-  if (!bus) {
-    return res.status(404).json({
-      message: "Bus not found",
+    const updateData = {};
+
+    if (bus_number !== undefined) updateData.bus_number = bus_number;
+    if (route !== undefined) updateData.route = route;
+    if (driver !== undefined) updateData.driver = driver;
+    if (total_seats !== undefined) updateData.total_seats = total_seats;
+    if (occupied_seats !== undefined) updateData.occupied_seats = occupied_seats;
+    if (status !== undefined) updateData.status = status;
+
+    const { data, error } = await supabase
+      .from("buses")
+      .update(updateData)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(200).json({
+      message: "Bus updated successfully",
+      bus: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
+};
 
-  buses = buses.filter((b) => b.id !== id);
+// DELETE bus
+const deleteBus = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
 
-  res.status(200).json({
-    message: "Bus deleted successfully",
-  });
+    const { error } = await supabase
+      .from("buses")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(200).json({
+      message: "Bus deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
 };
 
 module.exports = {
