@@ -1,49 +1,63 @@
-import StudentLayout from "../../components/layouts/StudentLayout";
+import { useEffect, useState } from "react";
+import { getNotifications } from "../../api/notificationApi";
 
-import notifications from "../../mock/notifications";
+const Notifications = () => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-function Notifications() {
+  const fetchNotifications = async () => {
+    try {
+      const data = await getNotifications();
+
+      const studentNotifications = data.filter(
+        (notification) =>
+          notification.role === "student" ||
+          notification.role === "all"
+      );
+
+      setNotifications(studentNotifications);
+    } catch (error) {
+      console.log("Error fetching notifications:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  if (loading) {
+    return <h2>Loading notifications...</h2>;
+  }
+
   return (
-    <StudentLayout>
-      <h1>🔔 Notifications</h1>
+    <div style={{ padding: "20px" }}>
+      <h1>🔔 Student Notifications</h1>
 
-      <div
-        style={{
-          marginTop: "20px",
-        }}
-      >
-        {notifications.map((notification) => (
+      {notifications.length === 0 ? (
+        <p>No notifications found</p>
+      ) : (
+        notifications.map((notification) => (
           <div
             key={notification.id}
             style={{
-              border: "1px solid #ddd",
-              borderRadius: "10px",
+              border: "1px solid #ccc",
               padding: "15px",
-              marginBottom: "15px",
-              background:
-                notification.status === "Unread"
-                  ? "#f0f9ff"
-                  : "#ffffff",
+              marginBottom: "12px",
+              borderRadius: "8px",
             }}
           >
             <h3>{notification.title}</h3>
-
             <p>{notification.message}</p>
-
             <p>
-              <strong>Time:</strong>{" "}
-              {notification.time}
-            </p>
-
-            <p>
-              <strong>Status:</strong>{" "}
-              {notification.status}
+              <strong>Type:</strong> {notification.type}
             </p>
           </div>
-        ))}
-      </div>
-    </StudentLayout>
+        ))
+      )}
+    </div>
   );
-}
+};
 
 export default Notifications;
