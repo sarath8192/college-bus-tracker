@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "../components/common/ProtectedRoute";
 
 // Auth Pages
 import Login from "../pages/auth/Login";
@@ -19,7 +20,7 @@ import EmergencyAlert from "../pages/driver/EmergencyAlert";
 import TripHistory from "../pages/driver/TripHistory";
 import DriverProfile from "../pages/driver/Profile";
 
-//Admin Pages
+// Admin Pages
 import AdminDashboard from "../pages/admin/Dashboard";
 import StudentsManagement from "../pages/admin/StudentsManagement";
 import DriversManagement from "../pages/admin/DriversManagement";
@@ -32,112 +33,185 @@ import AdminNotifications from "../pages/admin/Notifications";
 function AppRoutes() {
   return (
     <Routes>
-
       {/* Authentication Routes */}
-
       <Route path="/login" element={<Login />} />
-
-      <Route
-        path="/register"
-        element={<Register />}
-      />
+      <Route path="/register" element={<Register />} />
 
       {/* Student Routes */}
-
       <Route
         path="/student/dashboard"
-        element={<Dashboard />}
+        element={
+          <ProtectedRoute allowedRole="student">
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/student/tracking"
-        element={<LiveTracking />}
+        element={
+          <ProtectedRoute allowedRole="student">
+            <LiveTracking />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/student/seats"
-        element={<SeatAvailability />}
+        element={
+          <ProtectedRoute allowedRole="student">
+            <SeatAvailability />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/student/notifications"
-        element={<Notifications />}
+        element={
+          <ProtectedRoute allowedRole="student">
+            <Notifications />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/student/profile"
-        element={<Profile />}
+        element={
+          <ProtectedRoute allowedRole="student">
+            <Profile />
+          </ProtectedRoute>
+        }
       />
 
       {/* Driver Routes */}
-
       <Route
         path="/driver/dashboard"
-        element={<DriverDashboard />}
+        element={
+          <ProtectedRoute allowedRole="driver">
+            <DriverDashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/driver/trip"
-        element={<TripManagement />}
+        element={
+          <ProtectedRoute allowedRole="driver">
+            <TripManagement />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/driver/seats"
-        element={<SeatManagement />}
+        element={
+          <ProtectedRoute allowedRole="driver">
+            <SeatManagement />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/driver/emergency"
-        element={<EmergencyAlert />}
+        element={
+          <ProtectedRoute allowedRole="driver">
+            <EmergencyAlert />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/driver/history"
-        element={<TripHistory />}
+        element={
+          <ProtectedRoute allowedRole="driver">
+            <TripHistory />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/driver/profile"
-        element={<DriverProfile />}
+        element={
+          <ProtectedRoute allowedRole="driver">
+            <DriverProfile />
+          </ProtectedRoute>
+        }
       />
+
+      {/* Admin Routes */}
       <Route
-  path="/admin/dashboard"
-  element={<AdminDashboard />}
-/>
-<Route
-  path="/admin/students"
-  element={<StudentsManagement />}
-/>
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/admin/drivers"
-  element={<DriversManagement />}
-/>
+      <Route
+        path="/admin/students"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <StudentsManagement />
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/admin/buses"
-  element={<BusesManagement />}
-/>
+      <Route
+        path="/admin/drivers"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <DriversManagement />
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/admin/routes"
-  element={<RoutesManagement />}
-/>
-<Route
-  path="/admin/analytics"
-  element={<Analytics />}
-/>
-<Route
-  path="/admin/reports"
-  element={<Reports />}
-/>
+      <Route
+        path="/admin/buses"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <BusesManagement />
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/admin/notifications"
-  element={<AdminNotifications />}
-/>
+      <Route
+        path="/admin/routes"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <RoutesManagement />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/analytics"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Analytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/reports"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Reports />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/notifications"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <AdminNotifications />
+          </ProtectedRoute>
+        }
+      />
+
       {/* 404 Page */}
-
       <Route
         path="*"
         element={
@@ -151,7 +225,6 @@ function AppRoutes() {
           </h1>
         }
       />
-
     </Routes>
   );
 }
