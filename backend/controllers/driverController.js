@@ -1,116 +1,164 @@
-let drivers = [
-  {
-    id: 1,
-    name: "Ramesh",
-    email: "ramesh@gmail.com",
-    phone: "9876543210",
-    bus: "Bus-01",
-    route: "Vijayawada",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Suresh",
-    email: "suresh@gmail.com",
-    phone: "9876543211",
-    bus: "Bus-02",
-    route: "Guntur",
-    status: "Active",
-  },
-];
+const supabase = require("../config/supabaseClient");
 
 // GET all drivers
-const getDrivers = (req, res) => {
-  res.status(200).json(drivers);
+const getDrivers = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("drivers")
+      .select("*")
+      .order("id", { ascending: true });
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
 };
 
 // GET driver by ID
-const getDriverById = (req, res) => {
-  const id = Number(req.params.id);
+const getDriverById = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
 
-  const driver = drivers.find((d) => d.id === id);
+    const { data, error } = await supabase
+      .from("drivers")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-  if (!driver) {
-    return res.status(404).json({
-      message: "Driver not found",
+    if (error) {
+      return res.status(404).json({
+        message: "Driver not found",
+      });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  res.status(200).json(driver);
 };
 
 // POST create driver
-const createDriver = (req, res) => {
-  const { name, email, phone, bus, route, status } = req.body;
+const createDriver = async (req, res) => {
+  try {
+    const { name, email, phone, bus, route, status } = req.body;
 
-  if (!name || !email || !phone || !bus || !route) {
-    return res.status(400).json({
-      message: "Please provide name, email, phone, bus and route",
+    if (!name || !email || !phone || !bus || !route) {
+      return res.status(400).json({
+        message: "Please provide name, email, phone, bus and route",
+      });
+    }
+
+    const { data, error } = await supabase
+      .from("drivers")
+      .insert([
+        {
+          name,
+          email,
+          phone,
+          bus,
+          route,
+          status: status || "Active",
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(201).json({
+      message: "Driver created successfully",
+      driver: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  const newDriver = {
-    id: drivers.length + 1,
-    name,
-    email,
-    phone,
-    bus,
-    route,
-    status: status || "Active",
-  };
-
-  drivers.push(newDriver);
-
-  res.status(201).json({
-    message: "Driver created successfully",
-    driver: newDriver,
-  });
 };
 
 // PUT update driver
-const updateDriver = (req, res) => {
-  const id = Number(req.params.id);
+const updateDriver = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
 
-  const driver = drivers.find((d) => d.id === id);
+    const { name, email, phone, bus, route, status } = req.body;
 
-  if (!driver) {
-    return res.status(404).json({
-      message: "Driver not found",
+    const updateData = {};
+
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (phone !== undefined) updateData.phone = phone;
+    if (bus !== undefined) updateData.bus = bus;
+    if (route !== undefined) updateData.route = route;
+    if (status !== undefined) updateData.status = status;
+
+    const { data, error } = await supabase
+      .from("drivers")
+      .update(updateData)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(200).json({
+      message: "Driver updated successfully",
+      driver: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  const { name, email, phone, bus, route, status } = req.body;
-
-  driver.name = name || driver.name;
-  driver.email = email || driver.email;
-  driver.phone = phone || driver.phone;
-  driver.bus = bus || driver.bus;
-  driver.route = route || driver.route;
-  driver.status = status || driver.status;
-
-  res.status(200).json({
-    message: "Driver updated successfully",
-    driver,
-  });
 };
 
 // DELETE driver
-const deleteDriver = (req, res) => {
-  const id = Number(req.params.id);
+const deleteDriver = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
 
-  const driver = drivers.find((d) => d.id === id);
+    const { error } = await supabase
+      .from("drivers")
+      .delete()
+      .eq("id", id);
 
-  if (!driver) {
-    return res.status(404).json({
-      message: "Driver not found",
+    if (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    res.status(200).json({
+      message: "Driver deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  drivers = drivers.filter((d) => d.id !== id);
-
-  res.status(200).json({
-    message: "Driver deleted successfully",
-  });
 };
 
 module.exports = {
