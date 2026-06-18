@@ -9,6 +9,7 @@ const driverRoutes = require("./routes/driverRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const tripRoutes = require("./routes/tripRoutes");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/drivers", driverRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/trips", tripRoutes);
 
 const PORT = process.env.PORT || 5000;
 
