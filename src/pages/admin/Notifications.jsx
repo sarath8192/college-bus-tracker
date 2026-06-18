@@ -1,45 +1,40 @@
-import StudentLayout from "../../components/layouts/StudentLayout";
-
-function Notifications() {
+const Notifications = () => {
   const notifications = [
     {
       id: 1,
-      title: "Bus Delay Alert",
-      message: "Bus VIT-01 delayed by 10 minutes",
+      title: "Bus Delay",
+      message: "Bus VIT-01 is delayed by 10 minutes",
+      type: "Delay",
     },
     {
       id: 2,
       title: "Emergency Alert",
-      message: "Driver reported engine issue",
-    },
-    {
-      id: 3,
-      title: "Route Update",
-      message: "Route 3 updated due to road work",
+      message: "Driver reported emergency on Route Vijayawada",
+      type: "Emergency",
     },
   ];
 
   return (
-    <StudentLayout>
-      <h1>🔔 Admin Notifications</h1>
+    <div style={{ padding: "20px" }}>
+      <h1>🔔 Notifications</h1>
 
-      {notifications.map((item) => (
+      {notifications.map((notification) => (
         <div
-          key={item.id}
+          key={notification.id}
           style={{
-            border: "1px solid #ddd",
+            border: "1px solid #ccc",
             padding: "15px",
-            marginBottom: "15px",
-            borderRadius: "10px",
+            marginBottom: "10px",
+            borderRadius: "8px",
           }}
         >
-          <h3>{item.title}</h3>
-
-          <p>{item.message}</p>
+          <h3>{notification.title}</h3>
+          <p>{notification.message}</p>
+          <strong>Type: {notification.type}</strong>
         </div>
       ))}
-    </StudentLayout>
+    </div>
   );
-}
+};
 
 export default Notifications;

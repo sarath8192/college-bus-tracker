@@ -1,65 +1,109 @@
-import StudentLayout from "../../components/layouts/StudentLayout";
+import { useEffect, useState } from "react";
+import { getStudents } from "../../api/studentApi";
+import { getBuses } from "../../api/busApi";
+import { getDrivers } from "../../api/driverApi";
 
-function Dashboard() {
-  const cards = [
-    {
-      title: "Total Students",
-      value: 1200,
-    },
-    {
-      title: "Total Drivers",
-      value: 25,
-    },
-    {
-      title: "Total Buses",
-      value: 20,
-    },
-    {
-      title: "Active Buses",
-      value: 18,
-    },
-    {
-      title: "Delayed Buses",
-      value: 2,
-    },
-    {
-      title: "Occupancy Rate",
-      value: "78%",
-    },
-  ];
+const Dashboard = () => {
+  const [stats, setStats] = useState({
+    students: 0,
+    buses: 0,
+    drivers: 0,
+    activeBuses: 0,
+    totalSeats: 0,
+    occupiedSeats: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  const fetchDashboardData = async () => {
+    try {
+      const students = await getStudents();
+      const buses = await getBuses();
+      const drivers = await getDrivers();
+
+      const activeBuses = buses.filter((bus) => bus.status === "Active").length;
+
+      const totalSeats = buses.reduce(
+        (sum, bus) => sum + Number(bus.totalSeats || 0),
+        0
+      );
+
+      const occupiedSeats = buses.reduce(
+        (sum, bus) => sum + Number(bus.occupiedSeats || 0),
+        0
+      );
+
+      setStats({
+        students: students.length,
+        buses: buses.length,
+        drivers: drivers.length,
+        activeBuses,
+        totalSeats,
+        occupiedSeats,
+      });
+    } catch (error) {
+      console.log("Error fetching dashboard data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return <h2>Loading dashboard...</h2>;
+  }
+
+  const availableSeats = stats.totalSeats - stats.occupiedSeats;
 
   return (
-    <StudentLayout>
-      <h1>👨‍💼 Admin Dashboard</h1>
+    <div style={{ padding: "20px" }}>
+      <h1>📊 Admin Dashboard</h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit,minmax(250px,1fr))",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
-        {cards.map((card, index) => (
-          <div
-            key={index}
-            style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              boxShadow:
-                "0px 2px 8px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h3>{card.title}</h3>
+      <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+        <div style={cardStyle}>
+          <h2>{stats.students}</h2>
+          <p>Total Students</p>
+        </div>
 
-            <h1>{card.value}</h1>
-          </div>
-        ))}
+        <div style={cardStyle}>
+          <h2>{stats.drivers}</h2>
+          <p>Total Drivers</p>
+        </div>
+
+        <div style={cardStyle}>
+          <h2>{stats.buses}</h2>
+          <p>Total Buses</p>
+        </div>
+
+        <div style={cardStyle}>
+          <h2>{stats.activeBuses}</h2>
+          <p>Active Buses</p>
+        </div>
+
+        <div style={cardStyle}>
+          <h2>{stats.occupiedSeats}</h2>
+          <p>Occupied Seats</p>
+        </div>
+
+        <div style={cardStyle}>
+          <h2>{availableSeats}</h2>
+          <p>Available Seats</p>
+        </div>
       </div>
-    </StudentLayout>
+    </div>
   );
-}
+};
+
+const cardStyle = {
+  width: "180px",
+  padding: "20px",
+  border: "1px solid #ccc",
+  borderRadius: "10px",
+  textAlign: "center",
+  backgroundColor: "#f5f5f5",
+};
 
 export default Dashboard;

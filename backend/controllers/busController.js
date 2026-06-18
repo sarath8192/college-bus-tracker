@@ -1,7 +1,7 @@
 let buses = [
   {
     id: 1,
-    busNumber: "Bus-01",
+    busNumber: "VIT-01",
     route: "Vijayawada",
     driver: "Ramesh",
     totalSeats: 40,
@@ -10,7 +10,7 @@ let buses = [
   },
   {
     id: 2,
-    busNumber: "Bus-02",
+    busNumber: "VIT-02",
     route: "Guntur",
     driver: "Suresh",
     totalSeats: 40,
@@ -19,12 +19,10 @@ let buses = [
   },
 ];
 
-// GET all buses
 const getBuses = (req, res) => {
   res.status(200).json(buses);
 };
 
-// GET bus by ID
 const getBusById = (req, res) => {
   const id = Number(req.params.id);
 
@@ -39,7 +37,6 @@ const getBusById = (req, res) => {
   res.status(200).json(bus);
 };
 
-// POST create bus
 const createBus = (req, res) => {
   const {
     busNumber,
@@ -74,7 +71,6 @@ const createBus = (req, res) => {
   });
 };
 
-// PUT update bus
 const updateBus = (req, res) => {
   const id = Number(req.params.id);
 
@@ -109,7 +105,6 @@ const updateBus = (req, res) => {
   });
 };
 
-// DELETE bus
 const deleteBus = (req, res) => {
   const id = Number(req.params.id);
 

@@ -1,49 +1,98 @@
-import StudentLayout from "../../components/layouts/StudentLayout";
+import { useEffect, useState } from "react";
+import { getStudents } from "../../api/studentApi";
+import { getBuses } from "../../api/busApi";
+import { getDrivers } from "../../api/driverApi";
 
-function Reports() {
-  const reports = [
-    {
-      id: 1,
-      title: "Daily Transport Report",
-      date: "16 June 2026",
-    },
-    {
-      id: 2,
-      title: "Weekly Occupancy Report",
-      date: "15 June 2026",
-    },
-    {
-      id: 3,
-      title: "Monthly Bus Performance Report",
-      date: "01 June 2026",
-    },
-  ];
+const Reports = () => {
+  const [report, setReport] = useState({
+    totalStudents: 0,
+    totalBuses: 0,
+    totalDrivers: 0,
+    totalSeats: 0,
+    occupiedSeats: 0,
+    availableSeats: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  const fetchReports = async () => {
+    try {
+      const students = await getStudents();
+      const buses = await getBuses();
+      const drivers = await getDrivers();
+
+      const totalSeats = buses.reduce(
+        (sum, bus) => sum + Number(bus.totalSeats || 0),
+        0
+      );
+
+      const occupiedSeats = buses.reduce(
+        (sum, bus) => sum + Number(bus.occupiedSeats || 0),
+        0
+      );
+
+      setReport({
+        totalStudents: students.length,
+        totalBuses: buses.length,
+        totalDrivers: drivers.length,
+        totalSeats,
+        occupiedSeats,
+        availableSeats: totalSeats - occupiedSeats,
+      });
+    } catch (error) {
+      console.log("Error fetching reports:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  if (loading) {
+    return <h2>Loading reports...</h2>;
+  }
 
   return (
-    <StudentLayout>
+    <div style={{ padding: "20px" }}>
       <h1>📄 Reports</h1>
 
-      {reports.map((report) => (
-        <div
-          key={report.id}
-          style={{
-            border: "1px solid #ddd",
-            padding: "15px",
-            marginBottom: "15px",
-            borderRadius: "10px",
-          }}
-        >
-          <h3>{report.title}</h3>
+      <table border="1" cellPadding="10" style={{ borderCollapse: "collapse" }}>
+        <tbody>
+          <tr>
+            <th>Total Students</th>
+            <td>{report.totalStudents}</td>
+          </tr>
 
-          <p>{report.date}</p>
+          <tr>
+            <th>Total Drivers</th>
+            <td>{report.totalDrivers}</td>
+          </tr>
 
-          <button>
-            View Report
-          </button>
-        </div>
-      ))}
-    </StudentLayout>
+          <tr>
+            <th>Total Buses</th>
+            <td>{report.totalBuses}</td>
+          </tr>
+
+          <tr>
+            <th>Total Seats</th>
+            <td>{report.totalSeats}</td>
+          </tr>
+
+          <tr>
+            <th>Occupied Seats</th>
+            <td>{report.occupiedSeats}</td>
+          </tr>
+
+          <tr>
+            <th>Available Seats</th>
+            <td>{report.availableSeats}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
-}
+};
 
 export default Reports;
