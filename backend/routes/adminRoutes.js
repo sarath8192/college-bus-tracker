@@ -3,18 +3,12 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  adminDashboard,
+  getAdminDashboard,
   getReports,
 } = require("../controllers/adminController");
 
-router.get(
-  "/dashboard",
-  adminDashboard
-);
+router.get("/dashboard", getAdminDashboard);
 
-router.get(
-  "/reports",
-  getReports
-);
+router.get("/reports", getReports);
 
 module.exports = router;
