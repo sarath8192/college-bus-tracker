@@ -1,14 +1,15 @@
 import StudentLayout from "../../components/layouts/StudentLayout";
-
 import DashboardCard from "../../components/common/DashboardCard";
+import LogoutButton from "../../components/common/LogoutButton";
 
 import { buses } from "../../mock/buses";
 
 function Dashboard() {
   return (
     <StudentLayout>
-
       <h1>Student Dashboard</h1>
+
+      <LogoutButton />
 
       <div
         style={{
@@ -32,7 +33,6 @@ function Dashboard() {
           value={buses[0].eta}
         />
       </div>
-
     </StudentLayout>
   );
 }

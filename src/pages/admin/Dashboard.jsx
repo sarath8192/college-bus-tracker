@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAdminDashboardStats } from "../../api/adminApi";
-
+import LogoutButton from "../../components/common/LogoutButton";
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalStudents: 0,
@@ -37,63 +37,65 @@ const Dashboard = () => {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>📊 Admin Dashboard</h1>
-      <p>Real-time data from Supabase database</p>
+  <div style={{ padding: "20px" }}>
+    <h1>📊 Admin Dashboard</h1>
+    <p>Real-time data from Supabase database</p>
 
-      <div style={styles.grid}>
-        <div style={styles.card}>
-          <h2>{stats.totalStudents}</h2>
-          <p>Total Students</p>
-        </div>
+    <LogoutButton />
 
-        <div style={styles.card}>
-          <h2>{stats.totalDrivers}</h2>
-          <p>Total Drivers</p>
-        </div>
+    <div style={styles.grid}>
+      <div style={styles.card}>
+        <h2>{stats.totalStudents}</h2>
+        <p>Total Students</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.totalBuses}</h2>
-          <p>Total Buses</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.totalDrivers}</h2>
+        <p>Total Drivers</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.activeBuses}</h2>
-          <p>Active Buses</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.totalBuses}</h2>
+        <p>Total Buses</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.totalSeats}</h2>
-          <p>Total Seats</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.activeBuses}</h2>
+        <p>Active Buses</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.occupiedSeats}</h2>
-          <p>Occupied Seats</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.totalSeats}</h2>
+        <p>Total Seats</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.availableSeats}</h2>
-          <p>Available Seats</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.occupiedSeats}</h2>
+        <p>Occupied Seats</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.totalNotifications}</h2>
-          <p>Notifications</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.availableSeats}</h2>
+        <p>Available Seats</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.activeTrips}</h2>
-          <p>Active Trips</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.totalNotifications}</h2>
+        <p>Notifications</p>
+      </div>
 
-        <div style={styles.card}>
-          <h2>{stats.completedTrips}</h2>
-          <p>Completed Trips</p>
-        </div>
+      <div style={styles.card}>
+        <h2>{stats.activeTrips}</h2>
+        <p>Active Trips</p>
+      </div>
+
+      <div style={styles.card}>
+        <h2>{stats.completedTrips}</h2>
+        <p>Completed Trips</p>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 const styles = {
