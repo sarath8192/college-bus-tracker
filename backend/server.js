@@ -36,3 +36,9 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+app.get("/api/env-check", (req, res) => {
+  res.json({
+    supabaseUrlExists: !!process.env.SUPABASE_URL,
+    supabaseKeyExists: !!process.env.SUPABASE_KEY,
+  });
+});
