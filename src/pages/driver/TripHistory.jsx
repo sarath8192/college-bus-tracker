@@ -1,3 +1,4 @@
+import BackToDashboard from "../../components/common/BackToDashboard";
 import { useEffect, useState } from "react";
 import { getTrips } from "../../api/tripApi";
 
@@ -21,51 +22,72 @@ const TripHistory = () => {
   }, []);
 
   if (loading) {
-    return <h2>Loading trip history...</h2>;
+    return <h2 style={{ padding: "20px" }}>Loading trip history...</h2>;
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>📜 Trip History</h1>
-
+    <div className="page">
+      <div className="page-header">
+        <h1>📜 Trip History</h1>
+        <p>View all active and completed bus trips.</p>
+      </div>
+<BackToDashboard />
       {trips.length === 0 ? (
-        <p>No trips found</p>
+        <div className="card">
+          <p>No trips found</p>
+        </div>
       ) : (
-        <table
-          border="1"
-          cellPadding="10"
-          style={{ borderCollapse: "collapse", width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Bus ID</th>
-              <th>Driver ID</th>
-              <th>Latitude</th>
-              <th>Longitude</th>
-              <th>Speed</th>
-              <th>Status</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {trips.map((trip) => (
-              <tr key={trip.id}>
-                <td>{trip.id}</td>
-                <td>{trip.bus_id}</td>
-                <td>{trip.driver_id}</td>
-                <td>{trip.latitude}</td>
-                <td>{trip.longitude}</td>
-                <td>{trip.speed}</td>
-                <td>{trip.status}</td>
-                <td>{trip.start_time ? new Date(trip.start_time).toLocaleString() : "-"}</td>
-                <td>{trip.end_time ? new Date(trip.end_time).toLocaleString() : "-"}</td>
+        <div className="table-container">
+          <table className="modern-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Bus ID</th>
+                <th>Driver ID</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Speed</th>
+                <th>Status</th>
+                <th>Start Time</th>
+                <th>End Time</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {trips.map((trip) => (
+                <tr key={trip.id}>
+                  <td>{trip.id}</td>
+                  <td>{trip.bus_id}</td>
+                  <td>{trip.driver_id}</td>
+                  <td>{trip.latitude}</td>
+                  <td>{trip.longitude}</td>
+                  <td>{trip.speed} km/h</td>
+                  <td>
+                    <span
+                      className={
+                        trip.status === "active"
+                          ? "badge badge-active"
+                          : "badge badge-inactive"
+                      }
+                    >
+                      {trip.status}
+                    </span>
+                  </td>
+                  <td>
+                    {trip.start_time
+                      ? new Date(trip.start_time).toLocaleString()
+                      : "-"}
+                  </td>
+                  <td>
+                    {trip.end_time
+                      ? new Date(trip.end_time).toLocaleString()
+                      : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

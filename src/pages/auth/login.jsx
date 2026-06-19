@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
 
 const Login = () => {
@@ -43,60 +43,70 @@ const Login = () => {
         setError("Invalid role");
       }
     } catch (error) {
-      setError(
-        error.response?.data?.message || "Login failed"
-      );
+      setError(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleLogin} style={styles.card}>
-        <h2 style={styles.title}>College Bus Tracker Login</h2>
+  <div className="form-container">
+    <form onSubmit={handleLogin} className="form-card">
+      <h2 className="form-title">College Bus Tracker Login</h2>
 
-        {error && <p style={styles.error}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
 
-        <div style={styles.formGroup}>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            value={formData.email}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
+      <div className="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          value={formData.email}
+          onChange={handleChange}
+          className="input"
+          required
+        />
+      </div>
 
-        <div style={styles.formGroup}>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            value={formData.password}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter password"
+          value={formData.password}
+          onChange={handleChange}
+          className="input"
+          required
+        />
+      </div>
 
-        <button type="submit" style={styles.button} disabled={loading}>
+      <div className="button-row">
+        <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1 }}>
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <div style={styles.demoBox}>
-          <p><b>Demo Login:</b></p>
-          <p>Student: student@gmail.com / 123456</p>
-          <p>Driver: driver@gmail.com / 123456</p>
-          <p>Admin: admin@gmail.com / 123456</p>
-        </div>
-      </form>
-    </div>
-  );
+        <Link to="/register" className="btn btn-success" style={{ flex: 1 }}>
+          Register
+        </Link>
+      </div>
+
+      <p className="link-text">
+        <Link to="/forgot-password">Forgot Password?</Link>
+      </p>
+
+      <div className="demo-box">
+        <p>
+          <b>Demo Login:</b>
+        </p>
+        <p>Student: student@gmail.com / 123456</p>
+        <p>Driver: driver@gmail.com / 123456</p>
+        <p>Admin: admin@gmail.com / 123456</p>
+      </div>
+    </form>
+  </div>
+);
 };
 
 const styles = {
@@ -129,15 +139,32 @@ const styles = {
     borderRadius: "6px",
     border: "1px solid #ccc",
   },
-  button: {
-    width: "100%",
-    padding: "12px",
+  buttonRow: {
+    display: "flex",
+    gap: "10px",
+    marginTop: "10px",
+  },
+  loginButton: {
+    flex: 1,
+    padding: "10px",
     border: "none",
     borderRadius: "6px",
-    background: "#2563eb",
+    backgroundColor: "#2563eb",
     color: "#fff",
-    fontSize: "16px",
     cursor: "pointer",
+  },
+  registerButton: {
+    flex: 1,
+    padding: "10px",
+    borderRadius: "6px",
+    backgroundColor: "#16a34a",
+    color: "#fff",
+    textDecoration: "none",
+    textAlign: "center",
+  },
+  forgotText: {
+    textAlign: "center",
+    marginTop: "12px",
   },
   error: {
     color: "red",

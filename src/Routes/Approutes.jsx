@@ -1,51 +1,60 @@
-import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "../components/common/ProtectedRoute";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-// Auth Pages
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import ForgotPassword from "../pages/auth/ForgotPassword";
 
-// Student Pages
-import Dashboard from "../pages/student/Dashboard";
-import LiveTracking from "../pages/student/LiveTracking";
+import ProtectedRoute from "../components/common/ProtectedRoute";
 import SeatAvailability from "../pages/student/SeatAvailability";
-import Notifications from "../pages/student/Notifications";
-import Profile from "../pages/student/Profile";
 
-// Driver Pages
+// Student pages
+import StudentDashboard from "../pages/student/Dashboard";
+import LiveTracking from "../pages/student/LiveTracking";
+import StudentNotifications from "../pages/student/Notifications";
+import StudentProfile from "../pages/student/Profile";
+
+// Driver pages
 import DriverDashboard from "../pages/driver/DriverDashboard";
 import TripManagement from "../pages/driver/TripManagement";
-import SeatManagement from "../pages/driver/SeatManagement";
+import SeatUpdate from "../pages/driver/SeatUpdate";
 import EmergencyAlert from "../pages/driver/EmergencyAlert";
 import TripHistory from "../pages/driver/TripHistory";
-import DriverProfile from "../pages/driver/Profile";
 
-// Admin Pages
+// Admin pages
 import AdminDashboard from "../pages/admin/Dashboard";
-import StudentsManagement from "../pages/admin/StudentsManagement";
-import DriversManagement from "../pages/admin/DriversManagement";
-import BusesManagement from "../pages/admin/BusesManagement";
-import RoutesManagement from "../pages/admin/RoutesManagement";
-import Analytics from "../pages/admin/Analytics";
-import Reports from "../pages/admin/Reports";
+import Students from "../pages/admin/Students";
+import Drivers from "../pages/admin/Drivers";
+import Buses from "../pages/admin/Buses";
+import RoutesPage from "../pages/admin/Routes";
 import AdminNotifications from "../pages/admin/Notifications";
+import Reports from "../pages/admin/Reports";
 
-function AppRoutes() {
+const AppRoutes = () => {
   return (
     <Routes>
-      {/* Authentication Routes */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Student Routes */}
       <Route
         path="/student/dashboard"
         element={
           <ProtectedRoute allowedRole="student">
-            <Dashboard />
+            <StudentDashboard />
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/student/seats"
+  element={
+    <ProtectedRoute allowedRole="student">
+      <SeatAvailability />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
         path="/student/tracking"
@@ -57,19 +66,10 @@ function AppRoutes() {
       />
 
       <Route
-        path="/student/seats"
-        element={
-          <ProtectedRoute allowedRole="student">
-            <SeatAvailability />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
         path="/student/notifications"
         element={
           <ProtectedRoute allowedRole="student">
-            <Notifications />
+            <StudentNotifications />
           </ProtectedRoute>
         }
       />
@@ -78,7 +78,7 @@ function AppRoutes() {
         path="/student/profile"
         element={
           <ProtectedRoute allowedRole="student">
-            <Profile />
+            <StudentProfile />
           </ProtectedRoute>
         }
       />
@@ -106,7 +106,7 @@ function AppRoutes() {
         path="/driver/seats"
         element={
           <ProtectedRoute allowedRole="driver">
-            <SeatManagement />
+            <SeatUpdate />
           </ProtectedRoute>
         }
       />
@@ -129,15 +129,6 @@ function AppRoutes() {
         }
       />
 
-      <Route
-        path="/driver/profile"
-        element={
-          <ProtectedRoute allowedRole="driver">
-            <DriverProfile />
-          </ProtectedRoute>
-        }
-      />
-
       {/* Admin Routes */}
       <Route
         path="/admin/dashboard"
@@ -152,7 +143,7 @@ function AppRoutes() {
         path="/admin/students"
         element={
           <ProtectedRoute allowedRole="admin">
-            <StudentsManagement />
+            <Students />
           </ProtectedRoute>
         }
       />
@@ -161,7 +152,7 @@ function AppRoutes() {
         path="/admin/drivers"
         element={
           <ProtectedRoute allowedRole="admin">
-            <DriversManagement />
+            <Drivers />
           </ProtectedRoute>
         }
       />
@@ -170,7 +161,7 @@ function AppRoutes() {
         path="/admin/buses"
         element={
           <ProtectedRoute allowedRole="admin">
-            <BusesManagement />
+            <Buses />
           </ProtectedRoute>
         }
       />
@@ -179,25 +170,7 @@ function AppRoutes() {
         path="/admin/routes"
         element={
           <ProtectedRoute allowedRole="admin">
-            <RoutesManagement />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/analytics"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <Analytics />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/reports"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <Reports />
+            <RoutesPage />
           </ProtectedRoute>
         }
       />
@@ -211,22 +184,18 @@ function AppRoutes() {
         }
       />
 
-      {/* 404 Page */}
       <Route
-        path="*"
+        path="/admin/reports"
         element={
-          <h1
-            style={{
-              textAlign: "center",
-              marginTop: "50px",
-            }}
-          >
-            404 - Page Not Found
-          </h1>
+          <ProtectedRoute allowedRole="admin">
+            <Reports />
+          </ProtectedRoute>
         }
       />
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
-}
+};
 
 export default AppRoutes;

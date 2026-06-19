@@ -10,6 +10,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const tripRoutes = require("./routes/tripRoutes");
+const routeRoutes = require("./routes/routeRoutes");
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/trips", tripRoutes);
-
+app.use("/api/routes", routeRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

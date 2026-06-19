@@ -9,3 +9,11 @@ export const loginUser = async (loginData) => {
   const response = await axiosInstance.post("/auth/login", loginData);
   return response.data;
 };
+
+export const forgotPassword = async (passwordData) => {
+  const response = await axiosInstance.post(
+    "/auth/forgot-password",
+    passwordData
+  );
+  return response.data;
+};

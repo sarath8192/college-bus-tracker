@@ -1,3 +1,4 @@
+import BackToDashboard from "../../components/common/BackToDashboard";
 import { useEffect, useState } from "react";
 import { getAdminReports } from "../../api/adminApi";
 
@@ -25,59 +26,58 @@ const Reports = () => {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>📄 Admin Reports</h1>
-      <p>Reports from Supabase database</p>
+    <div className="page">
+      <div className="page-header">
+        <h1>📄 Admin Reports</h1>
+        <p>Summary report generated from Supabase database.</p>
+      </div>
+      <BackToDashboard />
 
       {!report ? (
-        <p>No report found</p>
+        <div className="card">
+          <p>No report found</p>
+        </div>
       ) : (
-        <table
-          border="1"
-          cellPadding="12"
-          style={{
-            borderCollapse: "collapse",
-            minWidth: "500px",
-            backgroundColor: "#fff",
-          }}
-        >
-          <tbody>
-            <tr>
-              <th>Total Students</th>
-              <td>{report.totalStudents}</td>
-            </tr>
+        <div className="table-container">
+          <table className="modern-table">
+            <tbody>
+              <tr>
+                <th>Total Students</th>
+                <td>{report.totalStudents}</td>
+              </tr>
 
-            <tr>
-              <th>Total Drivers</th>
-              <td>{report.totalDrivers}</td>
-            </tr>
+              <tr>
+                <th>Total Drivers</th>
+                <td>{report.totalDrivers}</td>
+              </tr>
 
-            <tr>
-              <th>Total Buses</th>
-              <td>{report.totalBuses}</td>
-            </tr>
+              <tr>
+                <th>Total Buses</th>
+                <td>{report.totalBuses}</td>
+              </tr>
 
-            <tr>
-              <th>Total Trips</th>
-              <td>{report.totalTrips}</td>
-            </tr>
+              <tr>
+                <th>Total Trips</th>
+                <td>{report.totalTrips}</td>
+              </tr>
 
-            <tr>
-              <th>Total Seats</th>
-              <td>{report.totalSeats}</td>
-            </tr>
+              <tr>
+                <th>Total Seats</th>
+                <td>{report.totalSeats}</td>
+              </tr>
 
-            <tr>
-              <th>Occupied Seats</th>
-              <td>{report.occupiedSeats}</td>
-            </tr>
+              <tr>
+                <th>Occupied Seats</th>
+                <td>{report.occupiedSeats}</td>
+              </tr>
 
-            <tr>
-              <th>Available Seats</th>
-              <td>{report.availableSeats}</td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <th>Available Seats</th>
+                <td>{report.availableSeats}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

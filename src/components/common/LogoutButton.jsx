@@ -12,18 +12,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <button
-      onClick={handleLogout}
-      style={{
-        padding: "10px 14px",
-        border: "none",
-        borderRadius: "6px",
-        backgroundColor: "#dc2626",
-        color: "#fff",
-        cursor: "pointer",
-        marginTop: "20px",
-      }}
-    >
+    <button onClick={handleLogout} className="btn btn-danger">
       Logout
     </button>
   );

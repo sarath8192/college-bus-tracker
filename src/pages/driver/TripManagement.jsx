@@ -1,3 +1,4 @@
+import BackToDashboard from "../../components/common/BackToDashboard";
 import { useState } from "react";
 import {
   startTrip,
@@ -13,7 +14,7 @@ const TripManagement = () => {
     bus_id: 1,
     driver_id: 1,
     latitude: 16.5062,
-    longitude: 80.6480,
+    longitude: 80.648,
     speed: 35,
   });
 
@@ -50,9 +51,9 @@ const TripManagement = () => {
       setLoading(true);
 
       const newLocation = {
-        latitude: tripData.latitude + 0.002,
-        longitude: tripData.longitude + 0.002,
-        speed: tripData.speed + 2,
+        latitude: Number(tripData.latitude) + 0.002,
+        longitude: Number(tripData.longitude) + 0.002,
+        speed: Number(tripData.speed) + 2,
       };
 
       const data = await updateTripLocation(activeTrip.id, newLocation);
@@ -94,72 +95,75 @@ const TripManagement = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>🚌 Driver Trip Management</h1>
+    <div className="page">
+      <div className="page-header">
+        <h1>🚌 Driver Trip Management</h1>
+        <p>Start trips, update live location, and end active trips.</p>
+      </div>
+<BackToDashboard />
+      <div className="card" style={{ maxWidth: "650px" }}>
+        <h2>Trip Details</h2>
 
-      <div style={styles.card}>
-        <h3>Trip Details</h3>
-
-        <div style={styles.formGroup}>
+        <div className="form-group" style={{ marginTop: "18px" }}>
           <label>Bus ID</label>
           <input
             type="number"
             name="bus_id"
             value={tripData.bus_id}
             onChange={handleChange}
-            style={styles.input}
+            className="input"
           />
         </div>
 
-        <div style={styles.formGroup}>
+        <div className="form-group">
           <label>Driver ID</label>
           <input
             type="number"
             name="driver_id"
             value={tripData.driver_id}
             onChange={handleChange}
-            style={styles.input}
+            className="input"
           />
         </div>
 
-        <div style={styles.formGroup}>
+        <div className="form-group">
           <label>Latitude</label>
           <input
             type="number"
             name="latitude"
             value={tripData.latitude}
             onChange={handleChange}
-            style={styles.input}
+            className="input"
           />
         </div>
 
-        <div style={styles.formGroup}>
+        <div className="form-group">
           <label>Longitude</label>
           <input
             type="number"
             name="longitude"
             value={tripData.longitude}
             onChange={handleChange}
-            style={styles.input}
+            className="input"
           />
         </div>
 
-        <div style={styles.formGroup}>
+        <div className="form-group">
           <label>Speed</label>
           <input
             type="number"
             name="speed"
             value={tripData.speed}
             onChange={handleChange}
-            style={styles.input}
+            className="input"
           />
         </div>
 
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        <div className="action-row">
           <button
             onClick={handleStartTrip}
             disabled={loading || activeTrip}
-            style={styles.startButton}
+            className="btn btn-success"
           >
             Start Trip
           </button>
@@ -167,7 +171,7 @@ const TripManagement = () => {
           <button
             onClick={handleUpdateLocation}
             disabled={loading || !activeTrip}
-            style={styles.updateButton}
+            className="btn btn-primary"
           >
             Update Location
           </button>
@@ -175,7 +179,7 @@ const TripManagement = () => {
           <button
             onClick={handleEndTrip}
             disabled={loading || !activeTrip}
-            style={styles.endButton}
+            className="btn btn-danger"
           >
             End Trip
           </button>
@@ -183,64 +187,41 @@ const TripManagement = () => {
       </div>
 
       {activeTrip && (
-        <div style={styles.card}>
-          <h3>Active Trip</h3>
-          <p><strong>Trip ID:</strong> {activeTrip.id}</p>
-          <p><strong>Bus ID:</strong> {activeTrip.bus_id}</p>
-          <p><strong>Driver ID:</strong> {activeTrip.driver_id}</p>
-          <p><strong>Latitude:</strong> {activeTrip.latitude}</p>
-          <p><strong>Longitude:</strong> {activeTrip.longitude}</p>
-          <p><strong>Speed:</strong> {activeTrip.speed} km/h</p>
-          <p><strong>Status:</strong> {activeTrip.status}</p>
+        <div className="card" style={{ maxWidth: "650px", marginTop: "24px" }}>
+          <h2>Active Trip</h2>
+
+          <p style={{ marginTop: "12px" }}>
+            <strong>Trip ID:</strong> {activeTrip.id}
+          </p>
+
+          <p>
+            <strong>Bus ID:</strong> {activeTrip.bus_id}
+          </p>
+
+          <p>
+            <strong>Driver ID:</strong> {activeTrip.driver_id}
+          </p>
+
+          <p>
+            <strong>Latitude:</strong> {activeTrip.latitude}
+          </p>
+
+          <p>
+            <strong>Longitude:</strong> {activeTrip.longitude}
+          </p>
+
+          <p>
+            <strong>Speed:</strong> {activeTrip.speed} km/h
+          </p>
+
+          <p>
+            <strong>Status:</strong>{" "}
+            <span className="badge badge-active">{activeTrip.status}</span>
+          </p>
         </div>
       )}
     </div>
   );
-};
-
-const styles = {
-  card: {
-    maxWidth: "600px",
-    padding: "20px",
-    marginBottom: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "10px",
-    backgroundColor: "#fff",
-  },
-  formGroup: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: "12px",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  },
-  startButton: {
-    padding: "10px 14px",
-    border: "none",
-    borderRadius: "6px",
-    backgroundColor: "#16a34a",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  updateButton: {
-    padding: "10px 14px",
-    border: "none",
-    borderRadius: "6px",
-    backgroundColor: "#2563eb",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  endButton: {
-    padding: "10px 14px",
-    border: "none",
-    borderRadius: "6px",
-    backgroundColor: "#dc2626",
-    color: "#fff",
-    cursor: "pointer",
-  },
 };
 
 export default TripManagement;

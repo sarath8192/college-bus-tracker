@@ -1,3 +1,4 @@
+import BackToDashboard from "../../components/common/BackToDashboard";
 import { useEffect, useState } from "react";
 import {
   getNotifications,
@@ -5,16 +6,15 @@ import {
   deleteNotification,
 } from "../../api/notificationApi";
 
-const AdminNotifications = () => {
+const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const [formData, setFormData] = useState({
     title: "",
     message: "",
-    type: "",
     role: "all",
   });
+
+  const [loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
     try {
@@ -43,189 +43,128 @@ const AdminNotifications = () => {
 
     try {
       await createNotification(formData);
+      alert("Notification created successfully");
 
       setFormData({
         title: "",
         message: "",
-        type: "",
         role: "all",
       });
 
       fetchNotifications();
     } catch (error) {
-      console.log("Error creating notification:", error);
-      alert(
-        error.response?.data?.message ||
-          "Failed to create notification"
-      );
+      alert(error.response?.data?.message || "Failed to create notification");
     }
   };
 
   const handleDeleteNotification = async (id) => {
     try {
       await deleteNotification(id);
+      alert("Notification deleted successfully");
       fetchNotifications();
     } catch (error) {
-      console.log("Error deleting notification:", error);
-      alert("Failed to delete notification");
+      alert(error.response?.data?.message || "Failed to delete notification");
     }
   };
 
   if (loading) {
-    return <h2>Loading notifications...</h2>;
+    return <h2 style={{ padding: "20px" }}>Loading notifications...</h2>;
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>🔔 Admin Notifications</h1>
+    <div className="page">
+      <div className="page-header">
+        <h1>🔔 Admin Notifications</h1>
+        <p>Create, view, and delete notifications for students and drivers.</p>
+      </div>
 
-      <form
-        onSubmit={handleCreateNotification}
-        style={{
-          border: "1px solid #ccc",
-          padding: "20px",
-          borderRadius: "10px",
-          marginBottom: "25px",
-          maxWidth: "600px",
-        }}
-      >
-        <h3>Create Notification</h3>
+<BackToDashboard />
+      <div className="card" style={{ maxWidth: "700px", marginBottom: "24px" }}>
+        <h2>Create Notification</h2>
 
-        <div style={styles.formGroup}>
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            placeholder="Enter title"
-            value={formData.title}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
+        <form onSubmit={handleCreateNotification} style={{ marginTop: "18px" }}>
+          <div className="form-group">
+            <label>Title</label>
+            <input
+              type="text"
+              name="title"
+              placeholder="Enter notification title"
+              value={formData.title}
+              onChange={handleChange}
+              className="input"
+              required
+            />
+          </div>
 
-        <div style={styles.formGroup}>
-          <label>Message</label>
-          <textarea
-            name="message"
-            placeholder="Enter message"
-            value={formData.message}
-            onChange={handleChange}
-            style={styles.textarea}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label>Message</label>
+            <textarea
+              name="message"
+              placeholder="Enter notification message"
+              value={formData.message}
+              onChange={handleChange}
+              className="input"
+              rows="4"
+              style={{ resize: "vertical" }}
+              required
+            ></textarea>
+          </div>
 
-        <div style={styles.formGroup}>
-          <label>Type</label>
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          >
-            <option value="">Select Type</option>
-            <option value="Delay">Delay</option>
-            <option value="Emergency">Emergency</option>
-            <option value="Route Change">Route Change</option>
-            <option value="Arrival">Arrival</option>
-          </select>
-        </div>
+          <div className="form-group">
+            <label>Send To</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="input"
+            >
+              <option value="all">All</option>
+              <option value="student">Students</option>
+              <option value="driver">Drivers</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
 
-        <div style={styles.formGroup}>
-          <label>Visible To</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            style={styles.input}
-          >
-            <option value="all">All</option>
-            <option value="student">Student</option>
-            <option value="driver">Driver</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-
-        <button type="submit" style={styles.button}>
-          Create Notification
-        </button>
-      </form>
-
-      <h3>All Notifications</h3>
+          <button type="submit" className="btn btn-primary">
+            Create Notification
+          </button>
+        </form>
+      </div>
 
       {notifications.length === 0 ? (
-        <p>No notifications found</p>
+        <div className="card">
+          <p>No notifications found</p>
+        </div>
       ) : (
-        notifications.map((notification) => (
-          <div
-            key={notification.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "15px",
-              marginBottom: "12px",
-              borderRadius: "8px",
-            }}
-          >
-            <h3>{notification.title}</h3>
-            <p>{notification.message}</p>
-            <p>
-              <strong>Type:</strong> {notification.type}
-            </p>
-            <p>
-              <strong>Role:</strong> {notification.role}
-            </p>
+        <div className="grid">
+          {notifications.map((notification) => (
+            <div key={notification.id} className="card">
+              <h2>{notification.title}</h2>
 
-            <button
-              onClick={() =>
-                handleDeleteNotification(notification.id)
-              }
-              style={styles.deleteButton}
-            >
-              Delete
-            </button>
-          </div>
-        ))
+              <p style={{ marginTop: "10px", color: "#475569" }}>
+                {notification.message}
+              </p>
+
+              <p style={{ marginTop: "12px" }}>
+                <strong>Role:</strong>{" "}
+                <span className="badge badge-active">
+                  {notification.role}
+                </span>
+              </p>
+
+              <button
+                onClick={() => handleDeleteNotification(notification.id)}
+                className="btn btn-danger"
+                style={{ marginTop: "14px" }}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
-const styles = {
-  formGroup: {
-    marginBottom: "15px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-  },
-  textarea: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "1px solid #ccc",
-    minHeight: "80px",
-  },
-  button: {
-    padding: "10px 16px",
-    border: "none",
-    borderRadius: "6px",
-    backgroundColor: "#2563eb",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  deleteButton: {
-    padding: "8px 12px",
-    border: "none",
-    borderRadius: "6px",
-    backgroundColor: "#dc2626",
-    color: "#fff",
-    cursor: "pointer",
-  },
-};
-
-export default AdminNotifications;
+export default Notifications;

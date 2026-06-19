@@ -3,62 +3,38 @@ import LogoutButton from "../../components/common/LogoutButton";
 
 function DriverDashboard() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Driver Dashboard</h1>
+    <div className="page">
+      <div className="page-header">
+        <h1>👨‍✈️ Driver Dashboard</h1>
+        <p>Manage your trip, seats, emergencies, and route activity.</p>
+      </div>
 
       <LogoutButton />
 
-      <p style={{ marginTop: "15px", color: "#555" }}>
-        Welcome driver. Manage your trip, seats, emergency alerts, and trip
-        history from here.
-      </p>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "20px",
-          marginTop: "25px",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="grid" style={{ marginTop: "24px" }}>
         <DashboardCard title="Assigned Bus" value="VIT-01" />
         <DashboardCard title="Route" value="Vijayawada" />
         <DashboardCard title="Trip Status" value="Not Started" />
         <DashboardCard title="Seat Occupancy" value="20 / 40" />
       </div>
 
-      <div
-        style={{
-          marginTop: "30px",
-          padding: "20px",
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          backgroundColor: "#fff",
-        }}
-      >
+      <div className="action-panel">
         <h2>Driver Actions</h2>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "15px",
-            marginTop: "15px",
-            flexWrap: "wrap",
-          }}
-        >
-          <a href="/driver/trip" style={buttonStyle}>
+        <div className="action-row">
+          <a href="/driver/trip" className="btn btn-primary">
             Manage Trip
           </a>
 
-          <a href="/driver/seats" style={buttonStyle}>
+          <a href="/driver/seats" className="btn btn-success">
             Update Seats
           </a>
 
-          <a href="/driver/emergency" style={dangerButtonStyle}>
+          <a href="/driver/emergency" className="btn btn-danger">
             Emergency Alert
           </a>
 
-          <a href="/driver/history" style={buttonStyle}>
+          <a href="/driver/history" className="btn btn-dark">
             Trip History
           </a>
         </div>
@@ -66,23 +42,5 @@ function DriverDashboard() {
     </div>
   );
 }
-
-const buttonStyle = {
-  padding: "10px 14px",
-  backgroundColor: "#2563eb",
-  color: "#fff",
-  textDecoration: "none",
-  borderRadius: "6px",
-  display: "inline-block",
-};
-
-const dangerButtonStyle = {
-  padding: "10px 14px",
-  backgroundColor: "#dc2626",
-  color: "#fff",
-  textDecoration: "none",
-  borderRadius: "6px",
-  display: "inline-block",
-};
 
 export default DriverDashboard;

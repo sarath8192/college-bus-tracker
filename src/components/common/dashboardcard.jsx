@@ -1,21 +1,10 @@
-function DashboardCard({
-  title,
-  value,
-}) {
+const DashboardCard = ({ title, value }) => {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "10px",
-        padding: "20px",
-        width: "220px",
-      }}
-    >
-      <h3>{title}</h3>
-
+    <div className="stat-card">
       <h2>{value}</h2>
+      <p>{title}</p>
     </div>
   );
-}
+};
 
 export default DashboardCard;
