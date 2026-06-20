@@ -1,29 +1,24 @@
-import BackToDashboard from "../../components/common/BackToDashboard";
 import { useEffect, useState } from "react";
 import {
-  getNotifications,
   createNotification,
-  deleteNotification,
+  getNotifications,
 } from "../../api/notificationApi";
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState([]);
   const [formData, setFormData] = useState({
-    title: "",
     message: "",
-    role: "all",
+    type: "student",
   });
 
-  const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchNotifications = async () => {
     try {
       const data = await getNotifications();
       setNotifications(data);
     } catch (error) {
-      console.log("Error fetching notifications:", error);
-    } finally {
-      setLoading(false);
+      console.log("Fetch notifications error:", error);
     }
   };
 
@@ -38,131 +33,115 @@ const Notifications = () => {
     });
   };
 
-  const handleCreateNotification = async (e) => {
+  const handleSendNotification = async (e) => {
     e.preventDefault();
 
+    if (!formData.message.trim()) {
+      alert("Please enter notification message");
+      return;
+    }
+
     try {
-      await createNotification(formData);
-      alert("Notification created successfully");
+      setLoading(true);
+
+      await createNotification({
+        title: "Admin Notification",
+        message: formData.message,
+        type: formData.type,
+      });
+
+      alert("Notification sent successfully");
 
       setFormData({
-        title: "",
         message: "",
-        role: "all",
+        type: "student",
       });
 
       fetchNotifications();
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to create notification");
+      console.log("Notification error:", error);
+      alert(error.response?.data?.message || "Failed to send notification");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleDeleteNotification = async (id) => {
-    try {
-      await deleteNotification(id);
-      alert("Notification deleted successfully");
-      fetchNotifications();
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to delete notification");
-    }
-  };
-
-  if (loading) {
-    return <h2 style={{ padding: "20px" }}>Loading notifications...</h2>;
-  }
 
   return (
     <div className="page">
       <div className="page-header">
         <h1>🔔 Admin Notifications</h1>
-        <p>Create, view, and delete notifications for students and drivers.</p>
+        <p>Send notifications to students, drivers, or everyone.</p>
       </div>
 
-<BackToDashboard />
-      <div className="card" style={{ maxWidth: "700px", marginBottom: "24px" }}>
-        <h2>Create Notification</h2>
+      <div className="card" style={{ maxWidth: "650px" }}>
+        <h2>Send Notification</h2>
 
-        <form onSubmit={handleCreateNotification} style={{ marginTop: "18px" }}>
+        <form onSubmit={handleSendNotification} style={{ marginTop: "18px" }}>
           <div className="form-group">
-            <label>Title</label>
-            <input
-              type="text"
-              name="title"
-              placeholder="Enter notification title"
-              value={formData.title}
+            <label>Send Notification To</label>
+            <select
+              name="type"
+              value={formData.type}
               onChange={handleChange}
               className="input"
               required
-            />
+            >
+              <option value="student">Students</option>
+              <option value="driver">Drivers</option>
+              <option value="admin">Admin</option>
+              <option value="all">All</option>
+            </select>
           </div>
 
           <div className="form-group">
-            <label>Message</label>
+            <label>Notification Message</label>
             <textarea
               name="message"
-              placeholder="Enter notification message"
+              placeholder="Example: Bus is delayed by 10 minutes..."
               value={formData.message}
               onChange={handleChange}
               className="input"
-              rows="4"
+              rows="6"
               style={{ resize: "vertical" }}
               required
             ></textarea>
           </div>
 
-          <div className="form-group">
-            <label>Send To</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="input"
-            >
-              <option value="all">All</option>
-              <option value="student">Students</option>
-              <option value="driver">Drivers</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          <button type="submit" className="btn btn-primary">
-            Create Notification
+          <button type="submit" disabled={loading} className="btn btn-primary">
+            {loading ? "Sending..." : "Send Notification"}
           </button>
         </form>
       </div>
 
-      {notifications.length === 0 ? (
-        <div className="card">
-          <p>No notifications found</p>
-        </div>
-      ) : (
-        <div className="grid">
-          {notifications.map((notification) => (
-            <div key={notification.id} className="card">
-              <h2>{notification.title}</h2>
+      <div className="card" style={{ marginTop: "24px" }}>
+        <h2>Recent Notifications</h2>
 
-              <p style={{ marginTop: "10px", color: "#475569" }}>
-                {notification.message}
-              </p>
+        {notifications.length === 0 ? (
+          <p>No notifications found.</p>
+        ) : (
+          <div className="table-wrapper">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Message</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
 
-              <p style={{ marginTop: "12px" }}>
-                <strong>Role:</strong>{" "}
-                <span className="badge badge-active">
-                  {notification.role}
-                </span>
-              </p>
-
-              <button
-                onClick={() => handleDeleteNotification(notification.id)}
-                className="btn btn-danger"
-                style={{ marginTop: "14px" }}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+              <tbody>
+                {notifications.map((notification) => (
+                  <tr key={notification.id}>
+                    <td>{notification.title}</td>
+                    <td>{notification.message}</td>
+                    <td>{notification.type}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
