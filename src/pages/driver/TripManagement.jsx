@@ -6,6 +6,7 @@ import {
 } from "../../api/tripApi";
 
 const TripManagement = () => {
+  const [busId, setBusId] = useState("");
   const [tripId, setTripId] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -19,12 +20,10 @@ const TripManagement = () => {
 
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const location = {
+          resolve({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-          };
-
-          resolve(location);
+          });
         },
         (error) => {
           if (error.code === 1) {
@@ -47,6 +46,11 @@ const TripManagement = () => {
   };
 
   const handleStartTrip = async () => {
+    if (!busId.trim()) {
+      alert("Please enter Bus ID");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -54,6 +58,7 @@ const TripManagement = () => {
       setCurrentLocation(location);
 
       const data = await startTrip({
+        bus_id: busId,
         latitude: location.latitude,
         longitude: location.longitude,
       });
@@ -66,6 +71,7 @@ const TripManagement = () => {
         setTripId(data.trip.id);
       }
     } catch (error) {
+      console.log("Start trip error:", error);
       alert(error.response?.data?.message || error || "Failed to start trip");
     } finally {
       setLoading(false);
@@ -91,6 +97,7 @@ const TripManagement = () => {
 
       alert("Location updated successfully");
     } catch (error) {
+      console.log("Update location error:", error);
       alert(error.response?.data?.message || error || "Failed to update location");
     } finally {
       setLoading(false);
@@ -113,6 +120,7 @@ const TripManagement = () => {
       setTripId("");
       setCurrentLocation(null);
     } catch (error) {
+      console.log("End trip error:", error);
       alert(error.response?.data?.message || "Failed to end trip");
     } finally {
       setLoading(false);
@@ -123,15 +131,25 @@ const TripManagement = () => {
     <div className="page">
       <div className="page-header">
         <h1>🚌 Trip Management</h1>
-        <p>Start trip, share live mobile GPS location, and end trip.</p>
+        <p>Start trip using driver mobile GPS location.</p>
       </div>
 
       <div className="card" style={{ maxWidth: "650px" }}>
-        <h2>Driver Trip Controls</h2>
+        <h2>Start Driver Trip</h2>
+
+        <div className="form-group" style={{ marginTop: "18px" }}>
+          <label>Bus ID</label>
+          <input
+            type="text"
+            placeholder="Enter Bus ID"
+            value={busId}
+            onChange={(e) => setBusId(e.target.value)}
+            className="input"
+          />
+        </div>
 
         <p style={{ marginTop: "10px", color: "#475569" }}>
-          Click start trip from your mobile phone. Your current GPS location will
-          be captured automatically.
+          Latitude and longitude will be captured automatically from driver mobile GPS.
         </p>
 
         {tripId && (
@@ -187,13 +205,14 @@ const TripManagement = () => {
       </div>
 
       <div className="card" style={{ maxWidth: "650px", marginTop: "24px" }}>
-        <h2>Location Instructions</h2>
+        <h2>Instructions</h2>
 
         <ul style={{ lineHeight: "1.8", paddingLeft: "20px" }}>
           <li>Open this page on driver mobile phone.</li>
-          <li>Allow location permission when browser asks.</li>
-          <li>Turn on mobile GPS/location.</li>
-          <li>Click Start Trip to share current location.</li>
+          <li>Enter Bus ID only.</li>
+          <li>Click Start Trip.</li>
+          <li>Allow location permission.</li>
+          <li>Latitude and longitude are captured automatically.</li>
           <li>Click Update Live Location to update bus position.</li>
           <li>Click End Trip after completing the trip.</li>
         </ul>
