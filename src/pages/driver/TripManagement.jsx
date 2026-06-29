@@ -1,4 +1,3 @@
-import BackToDashboard from "../../components/common/BackToDashboard";
 import { useState } from "react";
 import {
   startTrip,
@@ -7,21 +6,43 @@ import {
 } from "../../api/tripApi";
 
 const TripManagement = () => {
-  const [activeTrip, setActiveTrip] = useState(null);
+  const [tripId, setTripId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState(null);
 
-  const [tripData, setTripData] = useState({
-    bus_id: 1,
-    driver_id: 1,
-    latitude: 16.5062,
-    longitude: 80.648,
-    speed: 35,
-  });
+  const getDriverLocation = () => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject("Geolocation is not supported by this browser");
+        return;
+      }
 
-  const handleChange = (e) => {
-    setTripData({
-      ...tripData,
-      [e.target.name]: Number(e.target.value),
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+
+          resolve(location);
+        },
+        (error) => {
+          if (error.code === 1) {
+            reject("Location permission denied. Please allow location access.");
+          } else if (error.code === 2) {
+            reject("Location unavailable. Please turn on GPS.");
+          } else if (error.code === 3) {
+            reject("Location request timed out. Try again.");
+          } else {
+            reject("Failed to get location.");
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0,
+        }
+      );
     });
   };
 
@@ -29,20 +50,30 @@ const TripManagement = () => {
     try {
       setLoading(true);
 
-      const data = await startTrip(tripData);
-      setActiveTrip(data.trip);
+      const location = await getDriverLocation();
+      setCurrentLocation(location);
+
+      const data = await startTrip({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
 
       alert("Trip started successfully");
+
+      if (data?.id) {
+        setTripId(data.id);
+      } else if (data?.trip?.id) {
+        setTripId(data.trip.id);
+      }
     } catch (error) {
-      console.log("Start trip error:", error);
-      alert(error.response?.data?.message || "Failed to start trip");
+      alert(error.response?.data?.message || error || "Failed to start trip");
     } finally {
       setLoading(false);
     }
   };
 
   const handleUpdateLocation = async () => {
-    if (!activeTrip) {
+    if (!tripId) {
       alert("Please start trip first");
       return;
     }
@@ -50,44 +81,38 @@ const TripManagement = () => {
     try {
       setLoading(true);
 
-      const newLocation = {
-        latitude: Number(tripData.latitude) + 0.002,
-        longitude: Number(tripData.longitude) + 0.002,
-        speed: Number(tripData.speed) + 2,
-      };
+      const location = await getDriverLocation();
+      setCurrentLocation(location);
 
-      const data = await updateTripLocation(activeTrip.id, newLocation);
-
-      setActiveTrip(data.trip);
-      setTripData({
-        ...tripData,
-        ...newLocation,
+      await updateTripLocation(tripId, {
+        latitude: location.latitude,
+        longitude: location.longitude,
       });
 
       alert("Location updated successfully");
     } catch (error) {
-      console.log("Update location error:", error);
-      alert(error.response?.data?.message || "Failed to update location");
+      alert(error.response?.data?.message || error || "Failed to update location");
     } finally {
       setLoading(false);
     }
   };
 
   const handleEndTrip = async () => {
-    if (!activeTrip) {
-      alert("No active trip found");
+    if (!tripId) {
+      alert("Please start trip first");
       return;
     }
 
     try {
       setLoading(true);
 
-      await endTrip(activeTrip.id);
-      setActiveTrip(null);
+      await endTrip(tripId);
 
       alert("Trip ended successfully");
+
+      setTripId("");
+      setCurrentLocation(null);
     } catch (error) {
-      console.log("End trip error:", error);
       alert(error.response?.data?.message || "Failed to end trip");
     } finally {
       setLoading(false);
@@ -97,88 +122,63 @@ const TripManagement = () => {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>🚌 Driver Trip Management</h1>
-        <p>Start trips, update live location, and end active trips.</p>
+        <h1>🚌 Trip Management</h1>
+        <p>Start trip, share live mobile GPS location, and end trip.</p>
       </div>
-<BackToDashboard />
+
       <div className="card" style={{ maxWidth: "650px" }}>
-        <h2>Trip Details</h2>
+        <h2>Driver Trip Controls</h2>
 
-        <div className="form-group" style={{ marginTop: "18px" }}>
-          <label>Bus ID</label>
-          <input
-            type="number"
-            name="bus_id"
-            value={tripData.bus_id}
-            onChange={handleChange}
-            className="input"
-          />
-        </div>
+        <p style={{ marginTop: "10px", color: "#475569" }}>
+          Click start trip from your mobile phone. Your current GPS location will
+          be captured automatically.
+        </p>
 
-        <div className="form-group">
-          <label>Driver ID</label>
-          <input
-            type="number"
-            name="driver_id"
-            value={tripData.driver_id}
-            onChange={handleChange}
-            className="input"
-          />
-        </div>
+        {tripId && (
+          <div className="success-box" style={{ marginTop: "18px" }}>
+            <strong>Active Trip ID:</strong> {tripId}
+          </div>
+        )}
 
-        <div className="form-group">
-          <label>Latitude</label>
-          <input
-            type="number"
-            name="latitude"
-            value={tripData.latitude}
-            onChange={handleChange}
-            className="input"
-          />
-        </div>
+        {currentLocation && (
+          <div className="card" style={{ marginTop: "18px", background: "#f8fafc" }}>
+            <h3>Current Driver Location</h3>
+            <p>
+              <strong>Latitude:</strong> {currentLocation.latitude}
+            </p>
+            <p>
+              <strong>Longitude:</strong> {currentLocation.longitude}
+            </p>
+          </div>
+        )}
 
-        <div className="form-group">
-          <label>Longitude</label>
-          <input
-            type="number"
-            name="longitude"
-            value={tripData.longitude}
-            onChange={handleChange}
-            className="input"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Speed</label>
-          <input
-            type="number"
-            name="speed"
-            value={tripData.speed}
-            onChange={handleChange}
-            className="input"
-          />
-        </div>
-
-        <div className="action-row">
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+            marginTop: "22px",
+          }}
+        >
           <button
             onClick={handleStartTrip}
-            disabled={loading || activeTrip}
-            className="btn btn-success"
+            disabled={loading}
+            className="btn btn-primary"
           >
-            Start Trip
+            {loading ? "Getting Location..." : "Start Trip"}
           </button>
 
           <button
             onClick={handleUpdateLocation}
-            disabled={loading || !activeTrip}
-            className="btn btn-primary"
+            disabled={loading}
+            className="btn btn-warning"
           >
-            Update Location
+            Update Live Location
           </button>
 
           <button
             onClick={handleEndTrip}
-            disabled={loading || !activeTrip}
+            disabled={loading}
             className="btn btn-danger"
           >
             End Trip
@@ -186,40 +186,18 @@ const TripManagement = () => {
         </div>
       </div>
 
-      {activeTrip && (
-        <div className="card" style={{ maxWidth: "650px", marginTop: "24px" }}>
-          <h2>Active Trip</h2>
+      <div className="card" style={{ maxWidth: "650px", marginTop: "24px" }}>
+        <h2>Location Instructions</h2>
 
-          <p style={{ marginTop: "12px" }}>
-            <strong>Trip ID:</strong> {activeTrip.id}
-          </p>
-
-          <p>
-            <strong>Bus ID:</strong> {activeTrip.bus_id}
-          </p>
-
-          <p>
-            <strong>Driver ID:</strong> {activeTrip.driver_id}
-          </p>
-
-          <p>
-            <strong>Latitude:</strong> {activeTrip.latitude}
-          </p>
-
-          <p>
-            <strong>Longitude:</strong> {activeTrip.longitude}
-          </p>
-
-          <p>
-            <strong>Speed:</strong> {activeTrip.speed} km/h
-          </p>
-
-          <p>
-            <strong>Status:</strong>{" "}
-            <span className="badge badge-active">{activeTrip.status}</span>
-          </p>
-        </div>
-      )}
+        <ul style={{ lineHeight: "1.8", paddingLeft: "20px" }}>
+          <li>Open this page on driver mobile phone.</li>
+          <li>Allow location permission when browser asks.</li>
+          <li>Turn on mobile GPS/location.</li>
+          <li>Click Start Trip to share current location.</li>
+          <li>Click Update Live Location to update bus position.</li>
+          <li>Click End Trip after completing the trip.</li>
+        </ul>
+      </div>
     </div>
   );
 };

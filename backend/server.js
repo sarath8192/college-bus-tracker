@@ -16,6 +16,36 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+const supabase = require("./config/supabase");
+
+app.get("/api/supabase-test", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("students")
+      .select("*")
+      .limit(1);
+
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        error: error.message,
+        details: error,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Supabase connected successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      cause: error.cause?.message,
+    });
+  }
+});
 
 app.get("/", (req, res) => {
   res.json({
@@ -32,13 +62,13 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/routes", routeRoutes);
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 app.get("/api/env-check", (req, res) => {
   res.json({
     supabaseUrlExists: !!process.env.SUPABASE_URL,
     supabaseKeyExists: !!process.env.SUPABASE_KEY,
   });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
