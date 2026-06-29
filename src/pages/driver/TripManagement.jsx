@@ -7,6 +7,7 @@ import {
 
 const TripManagement = () => {
   const [busId, setBusId] = useState("");
+  const [driverId, setDriverId] = useState("");
   const [tripId, setTripId] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -51,6 +52,11 @@ const TripManagement = () => {
       return;
     }
 
+    if (!driverId.trim()) {
+      alert("Please enter Driver ID");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -59,6 +65,7 @@ const TripManagement = () => {
 
       const data = await startTrip({
         bus_id: busId,
+        driver_id: driverId,
         latitude: location.latitude,
         longitude: location.longitude,
       });
@@ -148,6 +155,17 @@ const TripManagement = () => {
           />
         </div>
 
+        <div className="form-group">
+          <label>Driver ID</label>
+          <input
+            type="text"
+            placeholder="Enter Driver ID"
+            value={driverId}
+            onChange={(e) => setDriverId(e.target.value)}
+            className="input"
+          />
+        </div>
+
         <p style={{ marginTop: "10px", color: "#475569" }}>
           Latitude and longitude will be captured automatically from driver mobile GPS.
         </p>
@@ -209,7 +227,7 @@ const TripManagement = () => {
 
         <ul style={{ lineHeight: "1.8", paddingLeft: "20px" }}>
           <li>Open this page on driver mobile phone.</li>
-          <li>Enter Bus ID only.</li>
+          <li>Enter Bus ID and Driver ID.</li>
           <li>Click Start Trip.</li>
           <li>Allow location permission.</li>
           <li>Latitude and longitude are captured automatically.</li>
