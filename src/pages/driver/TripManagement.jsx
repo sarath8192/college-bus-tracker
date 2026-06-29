@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   startTrip,
   updateTripLocation,
@@ -10,7 +10,11 @@ const TripManagement = () => {
   const [driverId, setDriverId] = useState("");
   const [tripId, setTripId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isTracking, setIsTracking] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
+
+  const watchIdRef = useRef(null);
+  const tripIdRef = useRef("");
 
   const getDriverLocation = () => {
     return new Promise((resolve, reject) => {
@@ -46,6 +50,66 @@ const TripManagement = () => {
     });
   };
 
+  const startAutoLocationTracking = (activeTripId) => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by this browser");
+      return;
+    }
+
+    tripIdRef.current = activeTripId;
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      async (position) => {
+        const location = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+
+        setCurrentLocation(location);
+
+        try {
+          await updateTripLocation(tripIdRef.current, {
+            latitude: location.latitude,
+            longitude: location.longitude,
+          });
+
+          console.log("Live location updated:", location);
+        } catch (error) {
+          console.log("Auto location update error:", error);
+        }
+      },
+      (error) => {
+        console.log("Watch position error:", error);
+
+        if (error.code === 1) {
+          alert("Location permission denied. Please allow location access.");
+        } else if (error.code === 2) {
+          alert("Location unavailable. Please turn on GPS.");
+        } else if (error.code === 3) {
+          alert("Location update timed out.");
+        } else {
+          alert("Failed to track live location.");
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 15000,
+      }
+    );
+
+    setIsTracking(true);
+  };
+
+  const stopAutoLocationTracking = () => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+
+    setIsTracking(false);
+  };
+
   const handleStartTrip = async () => {
     if (!busId.trim()) {
       alert("Please enter Bus ID");
@@ -70,13 +134,19 @@ const TripManagement = () => {
         longitude: location.longitude,
       });
 
-      alert("Trip started successfully");
+      const newTripId = data?.id || data?.trip?.id;
 
-      if (data?.id) {
-        setTripId(data.id);
-      } else if (data?.trip?.id) {
-        setTripId(data.trip.id);
+      if (!newTripId) {
+        alert("Trip started, but trip ID was not received from backend");
+        return;
       }
+
+      setTripId(newTripId);
+      tripIdRef.current = newTripId;
+
+      startAutoLocationTracking(newTripId);
+
+      alert("Trip started. Live location is updating automatically.");
     } catch (error) {
       console.log("Start trip error:", error);
       alert(error.response?.data?.message || error || "Failed to start trip");
@@ -85,7 +155,7 @@ const TripManagement = () => {
     }
   };
 
-  const handleUpdateLocation = async () => {
+  const handleManualUpdateLocation = async () => {
     if (!tripId) {
       alert("Please start trip first");
       return;
@@ -104,7 +174,7 @@ const TripManagement = () => {
 
       alert("Location updated successfully");
     } catch (error) {
-      console.log("Update location error:", error);
+      console.log("Manual location update error:", error);
       alert(error.response?.data?.message || error || "Failed to update location");
     } finally {
       setLoading(false);
@@ -120,11 +190,14 @@ const TripManagement = () => {
     try {
       setLoading(true);
 
+      stopAutoLocationTracking();
+
       await endTrip(tripId);
 
-      alert("Trip ended successfully");
+      alert("Trip ended. Live location tracking stopped.");
 
       setTripId("");
+      tripIdRef.current = "";
       setCurrentLocation(null);
     } catch (error) {
       console.log("End trip error:", error);
@@ -138,7 +211,7 @@ const TripManagement = () => {
     <div className="page">
       <div className="page-header">
         <h1>🚌 Trip Management</h1>
-        <p>Start trip using driver mobile GPS location.</p>
+        <p>Start trip and automatically update driver mobile GPS location.</p>
       </div>
 
       <div className="card" style={{ maxWidth: "650px" }}>
@@ -172,7 +245,13 @@ const TripManagement = () => {
 
         {tripId && (
           <div className="success-box" style={{ marginTop: "18px" }}>
-            <strong>Active Trip ID:</strong> {tripId}
+            <p>
+              <strong>Active Trip ID:</strong> {tripId}
+            </p>
+            <p>
+              <strong>Live Tracking:</strong>{" "}
+              {isTracking ? "Running automatically ✅" : "Stopped ❌"}
+            </p>
           </div>
         )}
 
@@ -198,23 +277,23 @@ const TripManagement = () => {
         >
           <button
             onClick={handleStartTrip}
-            disabled={loading}
+            disabled={loading || isTracking}
             className="btn btn-primary"
           >
             {loading ? "Getting Location..." : "Start Trip"}
           </button>
 
           <button
-            onClick={handleUpdateLocation}
-            disabled={loading}
+            onClick={handleManualUpdateLocation}
+            disabled={loading || !tripId}
             className="btn btn-warning"
           >
-            Update Live Location
+            Manual Update Location
           </button>
 
           <button
             onClick={handleEndTrip}
-            disabled={loading}
+            disabled={loading || !tripId}
             className="btn btn-danger"
           >
             End Trip
@@ -230,8 +309,8 @@ const TripManagement = () => {
           <li>Enter Bus ID and Driver ID.</li>
           <li>Click Start Trip.</li>
           <li>Allow location permission.</li>
-          <li>Latitude and longitude are captured automatically.</li>
-          <li>Click Update Live Location to update bus position.</li>
+          <li>Live location will update automatically when driver moves.</li>
+          <li>Keep the browser tab open during the trip.</li>
           <li>Click End Trip after completing the trip.</li>
         </ul>
       </div>
