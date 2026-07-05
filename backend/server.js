@@ -1,4 +1,4 @@
-
+const morgan = require("morgan");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -16,6 +16,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
 const supabase = require("./config/supabase");
 
 app.get("/api/supabase-test", async (req, res) => {
@@ -46,6 +47,16 @@ app.get("/api/supabase-test", async (req, res) => {
     });
   }
 });
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: "UP",
+    message: "Backend server is healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
 
 app.get("/", (req, res) => {
   res.json({
@@ -66,6 +77,14 @@ app.get("/api/env-check", (req, res) => {
   res.json({
     supabaseUrlExists: !!process.env.SUPABASE_URL,
     supabaseKeyExists: !!process.env.SUPABASE_KEY,
+  });
+});
+app.use((err, req, res, next) => {
+  console.error("Server Error:", err.message);
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
   });
 });
 

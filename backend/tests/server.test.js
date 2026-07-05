@@ -9,11 +9,13 @@ describe("College Bus Tracker Backend API", () => {
     expect(response.body.message).toBe("College Bus Tracker Backend Running");
   });
 
-  test("GET /api/env-check should return environment status", async () => {
-    const response = await request(app).get("/api/env-check");
+  test("GET /api/health should return server health status", async () => {
+    const response = await request(app).get("/api/health");
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty("supabaseUrlExists");
-    expect(response.body).toHaveProperty("supabaseKeyExists");
+    expect(response.body.success).toBe(true);
+    expect(response.body.status).toBe("UP");
+    expect(response.body).toHaveProperty("timestamp");
+    expect(response.body).toHaveProperty("uptime");
   });
 });
