@@ -1,7 +1,18 @@
-const morgan = require("morgan");
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
+
+const requiredEnvVariables = ["SUPABASE_URL", "SUPABASE_KEY", "JWT_SECRET"];
+
+requiredEnvVariables.forEach((envVar) => {
+  if (!process.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
+    process.exit(1);
+  }
+});
 
 const studentRoutes = require("./routes/studentRoutes");
 const busRoutes = require("./routes/busRoutes");
@@ -14,39 +25,48 @@ const routeRoutes = require("./routes/routeRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(helmet());
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: {
+    success: false,
+    message: "Too many requests from this IP, please try again later",
+  },
+});
+
+app.use("/api", apiLimiter);
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://college-bus-tracker-2lss.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(morgan("dev"));
-const supabase = require("./config/supabase");
 
-app.get("/api/supabase-test", async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from("students")
-      .select("*")
-      .limit(1);
-
-    if (error) {
-      return res.status(500).json({
-        success: false,
-        error: error.message,
-        details: error,
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Supabase connected successfully",
-      data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      cause: error.cause?.message,
-    });
-  }
+app.get("/", (req, res) => {
+  res.json({
+    message: "College Bus Tracker Backend Running",
+  });
 });
+
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
@@ -58,12 +78,6 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "College Bus Tracker Backend Running",
-  });
-});
-
 app.use("/api/students", studentRoutes);
 app.use("/api/buses", busRoutes);
 app.use("/api/drivers", driverRoutes);
@@ -72,13 +86,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/routes", routeRoutes);
-const PORT = process.env.PORT || 5000;
-app.get("/api/env-check", (req, res) => {
-  res.json({
-    supabaseUrlExists: !!process.env.SUPABASE_URL,
-    supabaseKeyExists: !!process.env.SUPABASE_KEY,
-  });
-});
+
 app.use((err, req, res, next) => {
   console.error("Server Error:", err.message);
 
@@ -87,6 +95,8 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal Server Error",
   });
 });
+
+const PORT = process.env.PORT || 5000;
 
 if (require.main === module) {
   app.listen(PORT, () => {
