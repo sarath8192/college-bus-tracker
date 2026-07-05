@@ -26,11 +26,14 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
+      - name: Frontend Security Audit
+        run: npm audit --audit-level=high
+
       - name: Build frontend
         run: npm run build
 
   backend-test:
-    name: Backend Test Check
+    name: Backend Test and Security Check
     runs-on: ubuntu-latest
 
     steps:
@@ -46,6 +49,11 @@ jobs:
         run: |
           cd backend
           npm install
+
+      - name: Backend Security Audit
+        run: |
+          cd backend
+          npm audit --audit-level=high
 
       - name: Run backend tests
         run: |
