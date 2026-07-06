@@ -220,3 +220,15 @@ Supabase is used as the cloud database.
 
 Sarath Chandra
 GitHub: https://github.com/sarath8192
+
+
+## Docker Images
+
+This project is containerized using Docker. The frontend and backend images are available on Docker Hub.
+
+### Backend Docker Image
+
+Pull backend image:
+
+```bash
+docker pull sarath1236/college-bus-backend:v1
