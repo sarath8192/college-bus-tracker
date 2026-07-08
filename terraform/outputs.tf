@@ -1,11 +1,14 @@
-output "project_name" {
-  value = var.project_name
+output "instance_public_ip" {
+  description = "Public IP address of EC2 instance"
+  value       = aws_instance.app_server.public_ip
 }
 
-output "environment" {
-  value = var.environment
+output "frontend_url" {
+  description = "Frontend URL"
+  value       = "http://${aws_instance.app_server.public_ip}"
 }
 
-output "generated_file" {
-  value = local_file.project_info.filename
+output "backend_url" {
+  description = "Backend API URL"
+  value       = "http://${aws_instance.app_server.public_ip}:5000"
 }
