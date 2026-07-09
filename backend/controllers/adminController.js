@@ -35,26 +35,22 @@ const getAdminDashboard = async (req, res) => {
       });
     }
 
-    const activeBuses = buses.filter(
-      (bus) => bus.status === "Active"
-    ).length;
+    const activeBuses = buses.filter((bus) => bus.status === "Active").length;
 
     const totalSeats = buses.reduce(
       (sum, bus) => sum + Number(bus.total_seats || 0),
-      0
+      0,
     );
 
     const occupiedSeats = buses.reduce(
       (sum, bus) => sum + Number(bus.occupied_seats || 0),
-      0
+      0,
     );
 
-    const activeTrips = trips.filter(
-      (trip) => trip.status === "active"
-    ).length;
+    const activeTrips = trips.filter((trip) => trip.status === "active").length;
 
     const completedTrips = trips.filter(
-      (trip) => trip.status === "completed"
+      (trip) => trip.status === "completed",
     ).length;
 
     res.status(200).json({
@@ -87,12 +83,12 @@ const getReports = async (req, res) => {
 
     const totalSeats = buses.reduce(
       (sum, bus) => sum + Number(bus.total_seats || 0),
-      0
+      0,
     );
 
     const occupiedSeats = buses.reduce(
       (sum, bus) => sum + Number(bus.occupied_seats || 0),
-      0
+      0,
     );
 
     res.status(200).json({

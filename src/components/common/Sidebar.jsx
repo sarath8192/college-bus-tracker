@@ -20,41 +20,31 @@ function Sidebar() {
         }}
       >
         <li>
-          <Link to="/student/dashboard">
-            Dashboard
-          </Link>
+          <Link to="/student/dashboard">Dashboard</Link>
         </li>
 
         <br />
 
         <li>
-          <Link to="/student/tracking">
-            Live Tracking
-          </Link>
+          <Link to="/student/tracking">Live Tracking</Link>
         </li>
 
         <br />
 
         <li>
-          <Link to="/student/seats">
-            Seat Availability
-          </Link>
+          <Link to="/student/seats">Seat Availability</Link>
         </li>
 
         <br />
 
         <li>
-          <Link to="/student/notifications">
-            Notifications
-          </Link>
+          <Link to="/student/notifications">Notifications</Link>
         </li>
 
         <br />
 
         <li>
-          <Link to="/student/profile">
-            Profile
-          </Link>
+          <Link to="/student/profile">Profile</Link>
         </li>
       </ul>
     </div>

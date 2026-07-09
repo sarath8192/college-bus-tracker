@@ -16,7 +16,10 @@ export const startTrip = async (tripData) => {
 };
 
 export const updateTripLocation = async (id, locationData) => {
-  const response = await axiosInstance.put(`/trips/${id}/location`, locationData);
+  const response = await axiosInstance.put(
+    `/trips/${id}/location`,
+    locationData,
+  );
   return response.data;
 };
 

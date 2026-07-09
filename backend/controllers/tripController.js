@@ -52,7 +52,12 @@ const startTrip = async (req, res) => {
   try {
     const { bus_id, driver_id, latitude, longitude, speed } = req.body;
 
-    if (!bus_id || !driver_id || latitude === undefined || longitude === undefined) {
+    if (
+      !bus_id ||
+      !driver_id ||
+      latitude === undefined ||
+      longitude === undefined
+    ) {
       return res.status(400).json({
         message: "Please provide bus_id, driver_id, latitude and longitude",
       });
@@ -183,10 +188,7 @@ const deleteTrip = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    const { error } = await supabase
-      .from("trips")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("trips").delete().eq("id", id);
 
     if (error) {
       return res.status(400).json({

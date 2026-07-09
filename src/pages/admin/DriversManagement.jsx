@@ -31,7 +31,11 @@ const DriversManagement = () => {
       {drivers.length === 0 ? (
         <p>No drivers found</p>
       ) : (
-        <table border="1" cellPadding="10" style={{ borderCollapse: "collapse" }}>
+        <table
+          border="1"
+          cellPadding="10"
+          style={{ borderCollapse: "collapse" }}
+        >
           <thead>
             <tr>
               <th>ID</th>

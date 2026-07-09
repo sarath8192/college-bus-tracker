@@ -1,9 +1,7 @@
 import Navbar from "../common/Navbar";
 import Sidebar from "../common/Sidebar";
 
-function StudentLayout({
-  children,
-}) {
+function StudentLayout({ children }) {
   return (
     <>
       <Navbar />

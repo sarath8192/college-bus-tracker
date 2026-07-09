@@ -3,9 +3,17 @@ const QuickActionsFooter = () => {
 
   const studentActions = [
     { label: "Dashboard", path: "/student/dashboard", color: "footer-blue" },
-    { label: "Live Tracking", path: "/student/tracking", color: "footer-green" },
+    {
+      label: "Live Tracking",
+      path: "/student/tracking",
+      color: "footer-green",
+    },
     { label: "Seats", path: "/student/seats", color: "footer-orange" },
-    { label: "Notifications", path: "/student/notifications", color: "footer-red" },
+    {
+      label: "Notifications",
+      path: "/student/notifications",
+      color: "footer-red",
+    },
     { label: "Profile", path: "/student/profile", color: "footer-purple" },
   ];
 
@@ -23,7 +31,11 @@ const QuickActionsFooter = () => {
     { label: "Drivers", path: "/admin/drivers", color: "footer-orange" },
     { label: "Buses", path: "/admin/buses", color: "footer-purple" },
     { label: "Routes", path: "/admin/routes", color: "footer-dark" },
-    { label: "Notifications", path: "/admin/notifications", color: "footer-red" },
+    {
+      label: "Notifications",
+      path: "/admin/notifications",
+      color: "footer-red",
+    },
     { label: "Reports", path: "/admin/reports", color: "footer-teal" },
   ];
 

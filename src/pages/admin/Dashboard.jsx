@@ -58,7 +58,9 @@ const Dashboard = () => {
     <div className="page">
       <div className="page-header">
         <h1>📊 Admin Dashboard</h1>
-        <p>Manage students, drivers, buses, routes, notifications, and reports.</p>
+        <p>
+          Manage students, drivers, buses, routes, notifications, and reports.
+        </p>
       </div>
 
       <LogoutButton />
@@ -151,7 +153,8 @@ const Dashboard = () => {
       <div className="action-panel">
         <h2>Recent Notifications</h2>
         <p style={{ marginTop: "6px", color: "#64748b" }}>
-          Latest notifications created by admin or emergency alerts from drivers.
+          Latest notifications created by admin or emergency alerts from
+          drivers.
         </p>
 
         {recentNotifications.length === 0 ? (

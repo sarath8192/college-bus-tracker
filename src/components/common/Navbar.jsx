@@ -7,9 +7,7 @@ function Navbar() {
         padding: "15px",
       }}
     >
-      <h2>
-        🚌 College Bus Tracking System
-      </h2>
+      <h2>🚌 College Bus Tracking System</h2>
     </nav>
   );
 }

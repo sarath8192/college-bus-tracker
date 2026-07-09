@@ -1,9 +1,5 @@
 import { useRef, useState } from "react";
-import {
-  startTrip,
-  updateTripLocation,
-  endTrip,
-} from "../../api/tripApi";
+import { startTrip, updateTripLocation, endTrip } from "../../api/tripApi";
 
 const TripManagement = () => {
   const [busId, setBusId] = useState("");
@@ -45,7 +41,7 @@ const TripManagement = () => {
           enableHighAccuracy: true,
           timeout: 15000,
           maximumAge: 0,
-        }
+        },
       );
     });
   };
@@ -95,7 +91,7 @@ const TripManagement = () => {
         enableHighAccuracy: true,
         maximumAge: 0,
         timeout: 15000,
-      }
+      },
     );
 
     setIsTracking(true);
@@ -175,7 +171,9 @@ const TripManagement = () => {
       alert("Location updated successfully");
     } catch (error) {
       console.log("Manual location update error:", error);
-      alert(error.response?.data?.message || error || "Failed to update location");
+      alert(
+        error.response?.data?.message || error || "Failed to update location",
+      );
     } finally {
       setLoading(false);
     }
@@ -240,7 +238,8 @@ const TripManagement = () => {
         </div>
 
         <p style={{ marginTop: "10px", color: "#475569" }}>
-          Latitude and longitude will be captured automatically from driver mobile GPS.
+          Latitude and longitude will be captured automatically from driver
+          mobile GPS.
         </p>
 
         {tripId && (
@@ -256,7 +255,10 @@ const TripManagement = () => {
         )}
 
         {currentLocation && (
-          <div className="card" style={{ marginTop: "18px", background: "#f8fafc" }}>
+          <div
+            className="card"
+            style={{ marginTop: "18px", background: "#f8fafc" }}
+          >
             <h3>Current Driver Location</h3>
             <p>
               <strong>Latitude:</strong> {currentLocation.latitude}

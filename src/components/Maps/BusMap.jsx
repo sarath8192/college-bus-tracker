@@ -6,22 +6,14 @@ import {
   Polyline,
 } from "react-leaflet";
 
-import {
-  busLocation,
-  busStops,
-} from "../../mock/location";
+import { busLocation, busStops } from "../../mock/location";
 
 function BusMap() {
-  const routePath = busStops.map(
-    (stop) => stop.position
-  );
+  const routePath = busStops.map((stop) => stop.position);
 
   return (
     <MapContainer
-      center={[
-        busLocation.latitude,
-        busLocation.longitude,
-      ]}
+      center={[busLocation.latitude, busLocation.longitude]}
       zoom={13}
       style={{
         height: "500px",
@@ -29,9 +21,7 @@ function BusMap() {
       }}
     >
       {/* Map Tiles */}
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       {/* Route Line */}
       <Polyline
@@ -43,26 +33,14 @@ function BusMap() {
       />
 
       {/* Current Bus Location */}
-      <Marker
-        position={[
-          busLocation.latitude,
-          busLocation.longitude,
-        ]}
-      >
-        <Popup>
-          🚌 {busLocation.busNumber}
-        </Popup>
+      <Marker position={[busLocation.latitude, busLocation.longitude]}>
+        <Popup>🚌 {busLocation.busNumber}</Popup>
       </Marker>
 
       {/* Bus Stops */}
       {busStops.map((stop) => (
-        <Marker
-          key={stop.id}
-          position={stop.position}
-        >
-          <Popup>
-            📍 {stop.name}
-          </Popup>
+        <Marker key={stop.id} position={stop.position}>
+          <Popup>📍 {stop.name}</Popup>
         </Marker>
       ))}
     </MapContainer>

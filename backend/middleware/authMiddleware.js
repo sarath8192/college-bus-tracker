@@ -7,19 +7,15 @@ const protect = (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-    token =
-      req.headers.authorization.split(" ")[1];
+    token = req.headers.authorization.split(" ")[1];
 
     try {
-      const decoded = jwt.verify(
-        token,
-        "mysecretkey"
-      );
+      const decoded = jwt.verify(token, "mysecretkey");
 
       req.user = decoded;
 
       next();
-    } catch (error) {
+    } catch {
       return res.status(401).json({
         message: "Invalid Token",
       });

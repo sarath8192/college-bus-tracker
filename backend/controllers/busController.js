@@ -52,14 +52,8 @@ const getBusById = async (req, res) => {
 // POST create bus
 const createBus = async (req, res) => {
   try {
-    const {
-      bus_number,
-      route,
-      driver,
-      total_seats,
-      occupied_seats,
-      status,
-    } = req.body;
+    const { bus_number, route, driver, total_seats, occupied_seats, status } =
+      req.body;
 
     if (!bus_number || !route || !driver || !total_seats) {
       return res.status(400).json({
@@ -105,14 +99,8 @@ const updateBus = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    const {
-      bus_number,
-      route,
-      driver,
-      total_seats,
-      occupied_seats,
-      status,
-    } = req.body;
+    const { bus_number, route, driver, total_seats, occupied_seats, status } =
+      req.body;
 
     const updateData = {};
 
@@ -120,7 +108,8 @@ const updateBus = async (req, res) => {
     if (route !== undefined) updateData.route = route;
     if (driver !== undefined) updateData.driver = driver;
     if (total_seats !== undefined) updateData.total_seats = total_seats;
-    if (occupied_seats !== undefined) updateData.occupied_seats = occupied_seats;
+    if (occupied_seats !== undefined)
+      updateData.occupied_seats = occupied_seats;
     if (status !== undefined) updateData.status = status;
 
     const { data, error } = await supabase
@@ -153,10 +142,7 @@ const deleteBus = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    const { error } = await supabase
-      .from("buses")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("buses").delete().eq("id", id);
 
     if (error) {
       return res.status(400).json({

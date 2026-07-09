@@ -52,7 +52,9 @@ const EmergencyAlert = () => {
     <div className="page">
       <div className="page-header">
         <h1>🚨 Emergency Alert</h1>
-        <p>Send emergency or breakdown alerts to admin, students, or everyone.</p>
+        <p>
+          Send emergency or breakdown alerts to admin, students, or everyone.
+        </p>
       </div>
       <BackToDashboard />
 
@@ -98,9 +100,13 @@ const EmergencyAlert = () => {
       <div className="card" style={{ maxWidth: "650px", marginTop: "24px" }}>
         <h2>Emergency Guidelines</h2>
 
-        <ul style={{ marginTop: "12px", paddingLeft: "20px", lineHeight: "1.8" }}>
+        <ul
+          style={{ marginTop: "12px", paddingLeft: "20px", lineHeight: "1.8" }}
+        >
           <li>Select Admin for breakdown or driver-related issues.</li>
-          <li>Select Students if students must know about delay or route change.</li>
+          <li>
+            Select Students if students must know about delay or route change.
+          </li>
           <li>Select All for serious emergency alerts.</li>
           <li>Write the location clearly.</li>
         </ul>

@@ -35,7 +35,9 @@ const LiveTracking = () => {
     <div className="page">
       <div className="page-header">
         <h1>📍 Live Bus Tracking</h1>
-        <p>Track active buses in real time. Location refreshes every 5 seconds.</p>
+        <p>
+          Track active buses in real time. Location refreshes every 5 seconds.
+        </p>
       </div>
       <BackToDashboard />
 

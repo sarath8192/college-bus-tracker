@@ -20,74 +20,74 @@ Students can track buses, check seat availability, view notifications, and manag
 
 ### Student
 
-* Register and login
-* View student dashboard
-* Track bus location
-* Check seat availability
-* View notifications
-* Manage profile
+- Register and login
+- View student dashboard
+- Track bus location
+- Check seat availability
+- View notifications
+- Manage profile
 
 ### Driver
 
-* Login as driver
-* View driver dashboard
-* Start and end trips
-* Update seat availability
-* Send emergency alerts
-* View trip history
+- Login as driver
+- View driver dashboard
+- Start and end trips
+- Update seat availability
+- Send emergency alerts
+- View trip history
 
 ### Admin
 
-* Login as admin
-* View admin dashboard
-* Manage students
-* Manage drivers
-* Manage buses
-* Manage routes
-* Send notifications
-* View reports and analytics
+- Login as admin
+- View admin dashboard
+- Manage students
+- Manage drivers
+- Manage buses
+- Manage routes
+- Send notifications
+- View reports and analytics
 
 ## Features
 
-* Role-based authentication
-* Student, Driver, and Admin dashboards
-* Bus route management
-* Seat availability tracking
-* Trip management
-* Emergency alert system
-* Notification system
-* Reports module
-* Responsive user interface
-* Frontend deployed on Vercel
-* Backend deployed on Render
-* Supabase cloud database integration
+- Role-based authentication
+- Student, Driver, and Admin dashboards
+- Bus route management
+- Seat availability tracking
+- Trip management
+- Emergency alert system
+- Notification system
+- Reports module
+- Responsive user interface
+- Frontend deployed on Vercel
+- Backend deployed on Render
+- Supabase cloud database integration
 
 ## Tech Stack
 
 ### Frontend
 
-* React.js
-* Vite
-* React Router DOM
-* Axios
-* CSS
+- React.js
+- Vite
+- React Router DOM
+- Axios
+- CSS
 
 ### Backend
 
-* Node.js
-* Express.js
-* JWT Authentication
-* Supabase JavaScript Client
+- Node.js
+- Express.js
+- JWT Authentication
+- Supabase JavaScript Client
 
 ### Database
 
-* Supabase PostgreSQL
+- Supabase PostgreSQL
 
 ### Deployment
 
-* Frontend: Vercel
-* Backend: Render
-* Database: Supabase
+- Frontend: Vercel
+- Backend: Render
+- Database: Supabase
 
 ## Folder Structure
 
@@ -208,19 +208,18 @@ Supabase is used as the cloud database.
 
 ## Future Improvements
 
-* Real GPS live tracking using driver mobile location
-* Push notifications
-* Advanced admin analytics
-* Email alerts
-* Mobile application version
-* Payment/pass management system
-* Driver attendance tracking
+- Real GPS live tracking using driver mobile location
+- Push notifications
+- Advanced admin analytics
+- Email alerts
+- Mobile application version
+- Payment/pass management system
+- Driver attendance tracking
 
 ## Author
 
 Sarath Chandra
 GitHub: https://github.com/sarath8192
-
 
 ## Docker Images
 
@@ -232,3 +231,4 @@ Pull backend image:
 
 ```bash
 docker pull sarath1236/college-bus-backend:v1
+```

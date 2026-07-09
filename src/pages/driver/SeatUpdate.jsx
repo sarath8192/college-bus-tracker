@@ -2,7 +2,7 @@ import BackToDashboard from "../../components/common/BackToDashboard";
 import { useState } from "react";
 
 const SeatUpdate = () => {
-  const [totalSeats, setTotalSeats] = useState(40);
+  const [totalSeats] = useState(40);
   const [occupiedSeats, setOccupiedSeats] = useState(0);
 
   const availableSeats = totalSeats - occupiedSeats;

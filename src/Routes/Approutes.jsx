@@ -48,13 +48,13 @@ const AppRoutes = () => {
         }
       />
       <Route
-  path="/student/seats"
-  element={
-    <ProtectedRoute allowedRole="student">
-      <SeatAvailability />
-    </ProtectedRoute>
-  }
-/>
+        path="/student/seats"
+        element={
+          <ProtectedRoute allowedRole="student">
+            <SeatAvailability />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/student/tracking"

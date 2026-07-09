@@ -37,9 +37,7 @@ function LoginForm() {
       <br />
       <br />
 
-      <button type="submit">
-        Login
-      </button>
+      <button type="submit">Login</button>
     </form>
   );
 }

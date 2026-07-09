@@ -14,7 +14,6 @@ const busSlice = createSlice({
   },
 });
 
-export const { setBuses } =
-  busSlice.actions;
+export const { setBuses } = busSlice.actions;
 
 export default busSlice.reducer;

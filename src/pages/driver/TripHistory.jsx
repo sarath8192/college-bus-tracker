@@ -31,7 +31,7 @@ const TripHistory = () => {
         <h1>📜 Trip History</h1>
         <p>View all active and completed bus trips.</p>
       </div>
-<BackToDashboard />
+      <BackToDashboard />
       {trips.length === 0 ? (
         <div className="card">
           <p>No trips found</p>

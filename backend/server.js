@@ -55,7 +55,7 @@ app.use(
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -87,7 +87,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/routes", routeRoutes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error("Server Error:", err.message);
 
   res.status(err.status || 500).json({

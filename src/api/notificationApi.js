@@ -11,17 +11,14 @@ export const getNotificationById = async (id) => {
 };
 
 export const createNotification = async (notificationData) => {
-  const response = await axiosInstance.post(
-    "/notifications",
-    notificationData
-  );
+  const response = await axiosInstance.post("/notifications", notificationData);
   return response.data;
 };
 
 export const updateNotification = async (id, notificationData) => {
   const response = await axiosInstance.put(
     `/notifications/${id}`,
-    notificationData
+    notificationData,
   );
   return response.data;
 };

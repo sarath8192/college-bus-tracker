@@ -2,7 +2,6 @@ const express = require("express");
 
 const router = express.Router();
 
-
 const {
   getNotifications,
   getNotificationById,
@@ -21,4 +20,4 @@ router.put("/:id", updateNotification);
 
 router.delete("/:id", deleteNotification);
 
-module.exports = router;    
+module.exports = router;

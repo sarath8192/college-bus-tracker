@@ -1,13 +1,6 @@
 import StudentLayout from "../../components/layouts/StudentLayout";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
 function Analytics() {
   const data = [
@@ -33,11 +26,7 @@ function Analytics() {
     <StudentLayout>
       <h1>📊 Analytics Dashboard</h1>
 
-      <BarChart
-        width={700}
-        height={400}
-        data={data}
-      >
+      <BarChart width={700} height={400} data={data}>
         <CartesianGrid strokeDasharray="3 3" />
 
         <XAxis dataKey="name" />
@@ -46,10 +35,7 @@ function Analytics() {
 
         <Tooltip />
 
-        <Bar
-          dataKey="students"
-          fill="#2563EB"
-        />
+        <Bar dataKey="students" fill="#2563EB" />
       </BarChart>
     </StudentLayout>
   );

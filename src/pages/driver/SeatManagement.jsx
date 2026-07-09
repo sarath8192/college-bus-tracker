@@ -27,11 +27,7 @@ function SeatManagement() {
         + Occupied
       </button>
 
-      <button
-        onClick={() => setOccupied(occupied - 1)}
-      >
-        - Occupied
-      </button>
+      <button onClick={() => setOccupied(occupied - 1)}>- Occupied</button>
     </StudentLayout>
   );
 }

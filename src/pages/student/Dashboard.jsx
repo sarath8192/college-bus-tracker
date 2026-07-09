@@ -17,7 +17,10 @@ function Dashboard() {
 
         <div className="grid" style={{ marginTop: "24px" }}>
           <DashboardCard title="Assigned Bus" value={buses[0].busNumber} />
-          <DashboardCard title="Available Seats" value={buses[0].availableSeats} />
+          <DashboardCard
+            title="Available Seats"
+            value={buses[0].availableSeats}
+          />
           <DashboardCard title="ETA" value={buses[0].eta} />
         </div>
 
@@ -44,7 +47,6 @@ function Dashboard() {
         </div>
       </div>
     </StudentLayout>
-    
   );
 }
 

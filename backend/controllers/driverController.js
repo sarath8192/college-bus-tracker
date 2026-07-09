@@ -139,10 +139,7 @@ const deleteDriver = async (req, res) => {
   try {
     const id = Number(req.params.id);
 
-    const { error } = await supabase
-      .from("drivers")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("drivers").delete().eq("id", id);
 
     if (error) {
       return res.status(400).json({

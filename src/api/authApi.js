@@ -13,7 +13,7 @@ export const loginUser = async (loginData) => {
 export const forgotPassword = async (passwordData) => {
   const response = await axiosInstance.post(
     "/auth/forgot-password",
-    passwordData
+    passwordData,
   );
   return response.data;
 };
