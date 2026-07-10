@@ -35,3 +35,6 @@ terraform/*.tfstate
 terraform/*.tfstate.backup
 terraform/.terraform.lock.hcl
 terraform/project-info.txt
+
+# Kubernetes secrets
+k8s/backend-secret.yaml
