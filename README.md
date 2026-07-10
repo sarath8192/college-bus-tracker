@@ -1,66 +1,44 @@
 # College Bus Tracking System
 
-A production-ready College Bus Tracking System built using React.js, Node.js, Express.js, Supabase, Render, and Vercel.
-
-This project helps students, drivers, and college administrators manage transportation efficiently through live tracking, seat availability, trip management, route management, emergency alerts, and notifications.
-
-## Live Project Links
-
-Frontend Deployment: https://college-bus-tracker-2lss.vercel.app
-Backend Deployment: https://college-bus-tracker-2.onrender.com
-GitHub Repository: https://github.com/sarath8192/college-bus-tracker
+A full-stack College Bus Tracking System built using the MERN stack and extended with DevOps, Cloud, Docker, Terraform, CI/CD, Security, Monitoring, Performance Optimization, and Kubernetes basics.
 
 ## Project Overview
 
-The College Bus Tracking System is a full-stack web application designed to solve real-world transportation problems faced by college students and administration.
+The College Bus Tracking System is designed to help students, drivers, and administrators manage and track college bus operations digitally.
 
-Students can track buses, check seat availability, view notifications, and manage their profiles. Drivers can manage trips, update seat availability, report emergencies, and view trip history. Admins can manage students, drivers, buses, routes, notifications, and reports from a centralized dashboard.
+The system provides features such as student login, driver management, bus management, live tracking support, seat availability, route management, notifications, admin dashboard, and backend APIs.
 
-## User Roles
+This project was also enhanced with real-world DevOps and Cloud practices to make it deployment-ready and resume-ready.
 
-### Student
+## Key Features
 
-- Register and login
-- View student dashboard
-- Track bus location
+### Student Features
+
+- Student registration and login
+- View assigned bus details
+- View route and stops
 - Check seat availability
 - View notifications
-- Manage profile
+- Access student profile
 
-### Driver
+### Driver Features
 
-- Login as driver
-- View driver dashboard
-- Start and end trips
-- Update seat availability
-- Send emergency alerts
+- Driver login
+- View assigned trip
+- Update trip status
+- Manage seat updates
+- Emergency alert support
 - View trip history
 
-### Admin
+### Admin Features
 
-- Login as admin
-- View admin dashboard
+- Admin dashboard
 - Manage students
 - Manage drivers
 - Manage buses
 - Manage routes
-- Send notifications
-- View reports and analytics
-
-## Features
-
-- Role-based authentication
-- Student, Driver, and Admin dashboards
-- Bus route management
-- Seat availability tracking
-- Trip management
-- Emergency alert system
-- Notification system
-- Reports module
-- Responsive user interface
-- Frontend deployed on Vercel
-- Backend deployed on Render
-- Supabase cloud database integration
+- Manage trips
+- Manage notifications
 
 ## Tech Stack
 
@@ -68,167 +46,77 @@ Students can track buses, check seat availability, view notifications, and manag
 
 - React.js
 - Vite
-- React Router DOM
+- React Router
+- Redux Toolkit
 - Axios
-- CSS
+- Leaflet
+- Material UI
+- React Toastify
 
 ### Backend
 
 - Node.js
 - Express.js
+- Supabase
 - JWT Authentication
-- Supabase JavaScript Client
+- REST APIs
 
-### Database
+### DevOps and Cloud
 
-- Supabase PostgreSQL
+- Git and GitHub
+- GitHub Actions
+- Docker
+- Docker Compose
+- Docker Hub
+- Terraform
+- AWS EC2
+- Kubernetes
+- ESLint
+- Prettier
+- Security scanning
+- Logging and monitoring
 
-### Deployment
+## Project Structure
 
-- Frontend: Vercel
-- Backend: Render
-- Database: Supabase
-
-## Folder Structure
-
-```text
+```txt
 college-bus-tracker/
 ├── backend/
-│   ├── controllers/
-│   ├── routes/
 │   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── routes/
+│   ├── utils/
 │   ├── server.js
+│   ├── Dockerfile
 │   └── package.json
 │
-├── public/
 ├── src/
-│   ├── api/
 │   ├── components/
 │   ├── pages/
-│   ├── redux/
 │   ├── Routes/
-│   ├── styles/
-│   ├── App.jsx
+│   ├── assets/
 │   └── main.jsx
 │
-├── vercel.json
+├── docs/
+│   ├── API.md
+│   ├── DEPLOYMENT.md
+│   ├── DEVOPS_PHASES.md
+│   ├── KUBERNETES.md
+│   ├── PERFORMANCE.md
+│   ├── SCREENSHOTS.md
+│   └── SETUP.md
+│
+├── k8s/
+│   ├── namespace.yaml
+│   ├── backend-deployment.yaml
+│   ├── backend-service.yaml
+│   ├── frontend-deployment.yaml
+│   └── frontend-service.yaml
+│
+├── terraform/
+├── .github/workflows/
+├── Dockerfile
+├── docker-compose.yml
+├── nginx.conf
 ├── package.json
 └── README.md
-```
-
-## Screenshots
-
-Add screenshots here:
-
-### Login Page
-
-![Login Page](./screenshots/login.png)
-
-### Student Dashboard
-
-![Student Dashboard](./screenshots/student-dashboard.png)
-
-### Driver Dashboard
-
-![Driver Dashboard](./screenshots/driver-dashboard.png)
-
-### Admin Dashboard
-
-![Admin Dashboard](./screenshots/admin-dashboard.png)
-
-### Seat Availability
-
-![Seat Availability](./screenshots/seat-availability.png)
-
-### Notifications
-
-![Notifications](./screenshots/notifications.png)
-
-## How to Run Locally
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/sarath8192/college-bus-tracker.git
-cd college-bus-tracker
-```
-
-### 2. Install frontend dependencies
-
-```bash
-npm install
-```
-
-### 3. Create frontend `.env` file
-
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-### 4. Run frontend
-
-```bash
-npm run dev
-```
-
-### 5. Install backend dependencies
-
-```bash
-cd backend
-npm install
-```
-
-### 6. Create backend `.env` file
-
-```env
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_anon_key
-JWT_SECRET=your_jwt_secret
-```
-
-### 7. Run backend
-
-```bash
-npm start
-```
-
-## Deployment
-
-### Frontend
-
-The frontend is deployed on Vercel.
-
-### Backend
-
-The backend is deployed on Render.
-
-### Database
-
-Supabase is used as the cloud database.
-
-## Future Improvements
-
-- Real GPS live tracking using driver mobile location
-- Push notifications
-- Advanced admin analytics
-- Email alerts
-- Mobile application version
-- Payment/pass management system
-- Driver attendance tracking
-
-## Author
-
-Sarath Chandra
-GitHub: https://github.com/sarath8192
-
-## Docker Images
-
-This project is containerized using Docker. The frontend and backend images are available on Docker Hub.
-
-### Backend Docker Image
-
-Pull backend image:
-
-```bash
-docker pull sarath1236/college-bus-backend:v1
-```
