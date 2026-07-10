@@ -1,201 +1,54 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import ForgotPassword from "../pages/auth/ForgotPassword";
+const Login = lazy(() => import("../pages/auth/Login"));
+const Register = lazy(() => import("../pages/auth/Register"));
 
-import ProtectedRoute from "../components/common/ProtectedRoute";
-import SeatAvailability from "../pages/student/SeatAvailability";
+const StudentDashboard = lazy(() => import("../pages/student/Dashboard"));
+const LiveTracking = lazy(() => import("../pages/student/LiveTracking"));
+const SeatAvailability = lazy(() => import("../pages/student/SeatAvailability"));
+const StudentProfile = lazy(() => import("../pages/student/Profile"));
+const Notifications = lazy(() => import("../pages/student/Notifications"));
 
-// Student pages
-import StudentDashboard from "../pages/student/Dashboard";
-import LiveTracking from "../pages/student/LiveTracking";
-import StudentNotifications from "../pages/student/Notifications";
-import StudentProfile from "../pages/student/Profile";
+const DriverDashboard = lazy(() => import("../pages/driver/DriverDashboard"));
+const TripManagement = lazy(() => import("../pages/driver/TripManagement"));
+const SeatManagement = lazy(() => import("../pages/driver/SeatManagement"));
+const EmergencyAlert = lazy(() => import("../pages/driver/EmergencyAlert"));
+const TripHistory = lazy(() => import("../pages/driver/TripHistory"));
+const DriverProfile = lazy(() => import("../pages/driver/Profile"));
 
-// Driver pages
-import DriverDashboard from "../pages/driver/DriverDashboard";
-import TripManagement from "../pages/driver/TripManagement";
-import SeatUpdate from "../pages/driver/SeatUpdate";
-import EmergencyAlert from "../pages/driver/EmergencyAlert";
-import TripHistory from "../pages/driver/TripHistory";
-
-// Admin pages
-import AdminDashboard from "../pages/admin/Dashboard";
-import Students from "../pages/admin/Students";
-import Drivers from "../pages/admin/Drivers";
-import Buses from "../pages/admin/Buses";
-import RoutesPage from "../pages/admin/Routes";
-import AdminNotifications from "../pages/admin/Notifications";
-import Reports from "../pages/admin/Reports";
-
-const AppRoutes = () => {
+function PageLoader() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-
-      {/* Student Routes */}
-      <Route
-        path="/student/dashboard"
-        element={
-          <ProtectedRoute allowedRole="student">
-            <StudentDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/student/seats"
-        element={
-          <ProtectedRoute allowedRole="student">
-            <SeatAvailability />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/student/tracking"
-        element={
-          <ProtectedRoute allowedRole="student">
-            <LiveTracking />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/student/notifications"
-        element={
-          <ProtectedRoute allowedRole="student">
-            <StudentNotifications />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/student/profile"
-        element={
-          <ProtectedRoute allowedRole="student">
-            <StudentProfile />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Driver Routes */}
-      <Route
-        path="/driver/dashboard"
-        element={
-          <ProtectedRoute allowedRole="driver">
-            <DriverDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/driver/trip"
-        element={
-          <ProtectedRoute allowedRole="driver">
-            <TripManagement />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/driver/seats"
-        element={
-          <ProtectedRoute allowedRole="driver">
-            <SeatUpdate />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/driver/emergency"
-        element={
-          <ProtectedRoute allowedRole="driver">
-            <EmergencyAlert />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/driver/history"
-        element={
-          <ProtectedRoute allowedRole="driver">
-            <TripHistory />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Admin Routes */}
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/students"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <Students />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/drivers"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <Drivers />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/buses"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <Buses />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/routes"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <RoutesPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/notifications"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <AdminNotifications />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/reports"
-        element={
-          <ProtectedRoute allowedRole="admin">
-            <Reports />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+    <div style={{ padding: "30px", textAlign: "center", fontSize: "18px" }}>
+      Loading page...
+    </div>
   );
-};
+}
+
+function AppRoutes() {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route path="/student/tracking" element={<LiveTracking />} />
+        <Route path="/student/seats" element={<SeatAvailability />} />
+        <Route path="/student/profile" element={<StudentProfile />} />
+        <Route path="/student/notifications" element={<Notifications />} />
+
+        <Route path="/driver/dashboard" element={<DriverDashboard />} />
+        <Route path="/driver/trip" element={<TripManagement />} />
+        <Route path="/driver/seats" element={<SeatManagement />} />
+        <Route path="/driver/emergency" element={<EmergencyAlert />} />
+        <Route path="/driver/history" element={<TripHistory />} />
+        <Route path="/driver/profile" element={<DriverProfile />} />
+
+        <Route path="*" element={<h1>Page Not Found</h1>} />
+      </Routes>
+    </Suspense>
+  );
+}
 
 export default AppRoutes;
