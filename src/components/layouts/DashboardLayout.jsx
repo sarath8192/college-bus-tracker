@@ -295,14 +295,13 @@ function DashboardLayout({ children }) {
         <div className="sidebar-footer">
           <button
             onClick={handleLogout}
-            className="btn btn-danger"
-            style={{ width: "100%", justifyContent: isCollapsed ? "center" : "flex-start", padding: "10px 12px" }}
+            className="btn btn-danger sidebar-logout-btn"
             title="Log Out"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ margin: 0 }}>
+            <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            {!isCollapsed && <span style={{ marginLeft: "8px" }}>Log Out</span>}
+            {!isCollapsed && <span>Log Out</span>}
           </button>
         </div>
       </aside>
