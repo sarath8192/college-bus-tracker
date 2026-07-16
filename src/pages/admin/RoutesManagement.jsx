@@ -18,27 +18,36 @@ function RoutesManagement() {
 
   return (
     <StudentLayout>
-      <h1>🛣 Routes Management</h1>
+      <div className="page">
+        <div className="page-header">
+          <div className="page-title-area">
+            <h1>🛣️ Routes Management (Alternative View)</h1>
+            <p>Static checklist of registered routes, checkpoints, and route mileage statistics.</p>
+          </div>
+        </div>
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Route</th>
-            <th>Stops</th>
-            <th>Distance</th>
-          </tr>
-        </thead>
+        <div className="table-container">
+          <table className="modern-table">
+            <thead>
+              <tr>
+                <th>Route Name</th>
+                <th>Intermediate Stops Count</th>
+                <th>Estimated Distance</th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {routes.map((route) => (
-            <tr key={route.id}>
-              <td>{route.name}</td>
-              <td>{route.stops}</td>
-              <td>{route.distance}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            <tbody>
+              {routes.map((route) => (
+                <tr key={route.id}>
+                  <td style={{ fontWeight: "700", color: "var(--neutral-dark)" }}>{route.name}</td>
+                  <td>{route.stops} checkpoints</td>
+                  <td style={{ fontWeight: "600" }}>{route.distance}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </StudentLayout>
   );
 }

@@ -1,8 +1,8 @@
-const DashboardCard = ({ title, value }) => {
+const DashboardCard = ({ title, value, type = "" }) => {
   return (
-    <div className="stat-card">
-      <h2>{value}</h2>
-      <p>{title}</p>
+    <div className={`stat-card ${type}`}>
+      <h3>{title}</h3>
+      <div className="value">{value}</div>
     </div>
   );
 };

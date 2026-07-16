@@ -18,29 +18,42 @@ function StudentsManagement() {
 
   return (
     <StudentLayout>
-      <h1>👨‍🎓 Students Management</h1>
+      <div className="page">
+        <div className="page-header">
+          <div className="page-title-area">
+            <h1>👨‍🎓 Students Management (Alternative View)</h1>
+            <p>Static checklist of registered student profiles and vehicle assignments.</p>
+          </div>
+        </div>
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Bus</th>
-          </tr>
-        </thead>
+        <div className="table-container">
+          <table className="modern-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Email Address</th>
+                <th>Assigned Bus</th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {students.map((student) => (
-            <tr key={student.id}>
-              <td>{student.id}</td>
-              <td>{student.name}</td>
-              <td>{student.email}</td>
-              <td>{student.bus}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            <tbody>
+              {students.map((student) => (
+                <tr key={student.id}>
+                  <td>{student.id}</td>
+                  <td style={{ fontWeight: "600", color: "var(--neutral-dark)" }}>{student.name}</td>
+                  <td>{student.email}</td>
+                  <td>
+                    <span className="badge badge-active">
+                      {student.bus}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </StudentLayout>
   );
 }

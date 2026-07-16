@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getBuses } from "../../api/busApi";
+import StudentLayout from "../../components/layouts/StudentLayout";
 
 const BusesManagement = () => {
   const [buses, setBuses] = useState([]);
@@ -21,49 +22,67 @@ const BusesManagement = () => {
   }, []);
 
   if (loading) {
-    return <h2>Loading buses...</h2>;
+    return (
+      <StudentLayout>
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Compiling bus rosters...</p>
+        </div>
+      </StudentLayout>
+    );
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>🚌 Buses Management</h1>
+    <StudentLayout>
+      <div className="page">
+        <div className="page-header">
+          <div className="page-title-area">
+            <h1>🚌 Buses Management (Alternative View)</h1>
+            <p>Roster of all college bus fleets in database including active driver assignments.</p>
+          </div>
+        </div>
 
-      {buses.length === 0 ? (
-        <p>No buses found</p>
-      ) : (
-        <table
-          border="1"
-          cellPadding="10"
-          style={{ borderCollapse: "collapse" }}
-        >
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Bus Number</th>
-              <th>Route</th>
-              <th>Driver</th>
-              <th>Total Seats</th>
-              <th>Occupied Seats</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        {buses.length === 0 ? (
+          <div className="empty-state">
+            <p>No buses found</p>
+          </div>
+        ) : (
+          <div className="table-container">
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Bus Number</th>
+                  <th>Route</th>
+                  <th>Driver Name</th>
+                  <th>Total Seats</th>
+                  <th>Occupied Seats</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
 
-          <tbody>
-            {buses.map((bus) => (
-              <tr key={bus.id}>
-                <td>{bus.id}</td>
-                <td>{bus.busNumber}</td>
-                <td>{bus.route}</td>
-                <td>{bus.driver}</td>
-                <td>{bus.totalSeats}</td>
-                <td>{bus.occupiedSeats}</td>
-                <td>{bus.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+              <tbody>
+                {buses.map((bus) => (
+                  <tr key={bus.id}>
+                    <td>{bus.id}</td>
+                    <td style={{ fontWeight: "700" }}>{bus.busNumber || bus.bus_number || "N/A"}</td>
+                    <td>{bus.route || "N/A"}</td>
+                    <td>{bus.driver || "N/A"}</td>
+                    <td>{bus.totalSeats || bus.total_seats || 0}</td>
+                    <td>{bus.occupiedSeats || bus.occupied_seats || 0}</td>
+                    <td>
+                      <span className={(bus.status || "").toLowerCase() === "active" ? "badge badge-active" : "badge badge-inactive"}>
+                        {bus.status || "Inactive"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </StudentLayout>
   );
 };
 
